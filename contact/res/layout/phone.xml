@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/lastrow">
+        
+         <TextView
+        android:id="@+id/phone_star"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:textSize="45sp"
+        android:textColor="#515151"
+        android:text="*" />
+
+    <TextView
+        android:id="@+id/phone_0"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+		android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:textSize="45sp"
+        android:textColor="#515151"
+        android:text="0" />
+
+    <TextView
+        android:id="@+id/phone_hash"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+		android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:textSize="45sp"
+        android:textColor="#515151"
+        android:text="#" />
+    </LinearLayout>
+   
+
+    <LinearLayout android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_above="@+id/lastrow"
+        android:id="@+id/row7">
+        
+        <TextView
+        android:id="@+id/phone_7"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+		android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:textSize="45sp"
+        android:textColor="#515151"
+        android:text="7" />
+
+    <TextView
+        android:id="@+id/phone_8"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+		android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:textSize="45sp"
+        android:textColor="#515151"
+        android:text="8" />
+
+    <TextView
+        android:id="@+id/phone_9"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+		android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:textSize="45sp"
+        android:textColor="#515151"
+        android:text="9" />
+    </LinearLayout>
+    
+	<LinearLayout android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_above="@+id/row7"
+        android:id="@+id/row4">
+	    
+	    <TextView
+        android:id="@+id/phone_4"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+		android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:textSize="45sp"
+        android:textColor="#515151"
+        android:text="4" />
+
+    <TextView
+        android:id="@+id/phone_5"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+		android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:textSize="45sp"
+        android:textColor="#515151"
+        android:text="5" />
+
+    <TextView
+        android:id="@+id/phone_6"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+		android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:textSize="45sp"
+        android:textColor="#515151"
+        android:text="6" />
+	    
+	</LinearLayout>
+    
+	<LinearLayout android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_above="@+id/row4"
+        android:id="@+id/row1">
+	    
+	    <TextView
+        android:id="@+id/phone_1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+		android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:textSize="45sp" 
+        android:textColor="#515151"       
+        android:text="1" />
+
+    <TextView
+        android:id="@+id/phone_2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+		android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:textSize="45sp"  
+        android:textColor="#515151"
+        android:text="2" />
+
+    <TextView
+        android:id="@+id/phone_3"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+		android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:textSize="45sp"  
+        android:textColor="#515151"
+        android:text="3" />
+	</LinearLayout>
+ 
+	<!-- add contact and call number -->
+	<View
+    android:layout_width="fill_parent"
+    android:layout_height="2dp"
+    android:background="#8FBE00"
+    android:layout_gravity="center"
+    android:layout_weight="1"
+    android:layout_above="@+id/row1"
+    android:id="@+id/separator"/>
+	
+    <LinearLayout android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_above="@+id/separator"
+        android:id="@+id/rowCall">
+        
+        <TextView
+        android:id="@+id/call_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="35sp"  
+        android:textColor="#515151"
+        android:text="call " />
+        
+        <TextView
+        android:id="@+id/phone_call"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+		android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:textSize="35sp"  
+        android:textColor="#8FBE00"
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit ="marquee_forever"
+        android:scrollHorizontally="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true" 
+        android:text="" />
+        
+        <ImageView android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:scaleType="fitCenter"
+            android:id="@+id/backspace"/>
+        
+    </LinearLayout>
+    
+    <!-- <View
+    android:layout_width="fill_parent"
+    android:layout_height="2dp"
+    android:background="#8FBE00"
+    android:layout_above="@+id/rowCall"
+    android:id="@+id/separator2"/> -->
+
+</RelativeLayout>
