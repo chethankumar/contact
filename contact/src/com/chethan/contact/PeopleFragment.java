@@ -76,20 +76,20 @@ public class PeopleFragment extends Fragment {
 			
 			@Override
 			public boolean onTouch(View arg0, MotionEvent arg1) {
+				float step = (Utils.getScreenHeight(getActivity())/contactNameList.size());
 				switch (arg1.getAction()) {
 				case MotionEvent.ACTION_MOVE:
 					if(arg1.getY()>(singleContact.getY()+singleContact.getHeight())){
-						singleContact.setTranslationY(singleContact.getY()+10);
+						singleContact.setTranslationY(singleContact.getY()+step);
 						contactListPosition++;
 						scroll();
 					}else if(arg1.getY()<(singleContact.getY())){
-						singleContact.setTranslationY(singleContact.getY()-10);
+						singleContact.setTranslationY(singleContact.getY()-step);
 						contactListPosition--;
 						scroll();
 					}
 					else{
 						singleContact.setTranslationY(arg1.getY()-singleContact.getHeight()/2);
-						float step = (Utils.getScreenHeight(getActivity())/contactNameList.size());
 						contactListPosition = (int)(arg1.getY()/step);
 						scroll();
 					}
