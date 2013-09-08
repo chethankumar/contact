@@ -7,7 +7,7 @@
     <LinearLayout
         android:layout_width="match_parent"
     	android:layout_height="match_parent"
-    	android:layout_margin="1dp"
+    	android:layout_margin="2dp"
     	android:background="@drawable/style_tile"
     	android:orientation="vertical" >
         
@@ -16,7 +16,9 @@
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
 	        android:scaleType="fitCenter"
-	        android:src="@drawable/me" />
+	        android:background="@drawable/roundcorners"
+	        android:layout_margin="2dp"
+	        android:src="@drawable/contact" />
 	
 	    <TextView
 	        android:id="@+id/log_nameOrNumber"
@@ -28,8 +30,6 @@
 	        android:ellipsize="marquee"
 	        android:marqueeRepeatLimit ="marquee_forever"
 	        android:scrollHorizontally="true"
-	        android:focusable="true"
-	        android:focusableInTouchMode="true" 
 	        android:textSize="13sp"
 	        android:text="TextView" />
 	

@@ -47,7 +47,7 @@ public class Utils {
 	}
 	
 	public static Typeface getPhoneTypeface(Activity activity) {
-		return Typeface.createFromAsset(activity.getAssets(),"Ubuntu-R.ttf");
+		return Typeface.createFromAsset(activity.getAssets(),"Ubuntu-M.ttf");
 	}
 	
 	public static Typeface getLightTypeface(Activity activity) {
@@ -88,30 +88,18 @@ public class Utils {
 		
 		switch (type) {
         case CallLog.Calls.OUTGOING_TYPE:
-//        	nameOrNumber.setBackgroundColor(Color.GREEN);
-//        	logDate.setBackgroundColor(Color.GREEN);
-//        	logTime.setBackgroundColor(Color.GREEN);
-        	
         	nameOrNumber.setTextColor(Color.parseColor("#8FBE00"));
         	logDate.setTextColor(Color.parseColor("#8FBE00"));
         	logTime.setTextColor(Color.parseColor("#8FBE00"));
             break;
 
         case CallLog.Calls.INCOMING_TYPE:
-//        	nameOrNumber.setBackgroundColor(Color.CYAN);
-//        	logDate.setBackgroundColor(Color.CYAN);
-//        	logTime.setBackgroundColor(Color.CYAN);
-        	
         	nameOrNumber.setTextColor(Color.parseColor("#00A8C6"));
         	logDate.setTextColor(Color.parseColor("#00A8C6"));
         	logTime.setTextColor(Color.parseColor("#00A8C6"));
             break;
 
         case CallLog.Calls.MISSED_TYPE:
-//        	nameOrNumber.setBackgroundColor(Color.RED);
-//        	logDate.setBackgroundColor(Color.RED);
-//        	logTime.setBackgroundColor(Color.RED);
-        	
         	nameOrNumber.setTextColor(Color.RED);
         	logDate.setTextColor(Color.RED);
         	logTime.setTextColor(Color.RED);
@@ -120,7 +108,7 @@ public class Utils {
 		gridLayout.addView(view);
 	}
 	
-	private static String getDate(Date date){
+	public static String getDate(Date date){
 		String monthString = "";
 		switch(date.getMonth()){
 			case 0:monthString="Jan";break;
@@ -139,7 +127,7 @@ public class Utils {
 		return date.getDate()+"-"+monthString;
 	}
 	
-	private static String getTime(Date date){
+	public static String getTime(Date date){
 		SimpleDateFormat sdf = new SimpleDateFormat("h:mm a");
 		return sdf.format(date);
 	}

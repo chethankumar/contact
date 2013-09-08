@@ -52,7 +52,6 @@ public class PhoneFragment extends Fragment{
 	   String message = getArguments().getString(EXTRA_MESSAGE);
 	   View v = inflater.inflate(R.layout.phone, container, false);
 	   myVib = (Vibrator) getActivity().getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
-//	   TextView messageTextView = (TextView)v.findViewById(R.id.textView);
 	   initPhoneNumbers(v);
 	   
 	   call_txt.setOnClickListener(new OnClickListener() {
