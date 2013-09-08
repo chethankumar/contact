@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <TextView 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="10sp"
+        android:layout_weight="1"
+	    android:gravity="center_horizontal"
+	    android:singleLine="true"
+        android:text="Chethan Kumar SN"
+        android:id="@+id/SingleContactName_2"/>
+    <TextView 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="17sp"
+        android:layout_weight="1"
+	    android:gravity="center_horizontal"
+	    android:singleLine="true"
+        android:text="Chethan Kumar SN"
+        android:id="@+id/SingleContactName_1"/>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:background="@drawable/style_tile"
+	    android:orientation="horizontal" >
+	    
+        <ImageView 
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:id="@+id/singleContact_msg"
+            android:src="@drawable/msg2"/>
+        
+        <TextView 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="22sp"
+        android:layout_weight="1"
+	    android:gravity="center_horizontal"
+	    android:singleLine="true"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit ="marquee_forever"
+        android:scrollHorizontally="true"
+        android:text="Chethan Kumar SN"
+        android:id="@+id/SingleContactName"/>
+    
+        <ImageView 
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:id="@+id/singleContact_call"
+            android:src="@drawable/msg"/>
+    </LinearLayout>
+    
+    <TextView 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="17sp"
+        android:layout_weight="1"
+	    android:gravity="center_horizontal"
+	    android:singleLine="true"
+        android:text="Chethan Kumar SN"
+        android:id="@+id/SingleContactName1"/>
+    <TextView 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="10sp"
+        android:layout_weight="1"
+	    android:gravity="center_horizontal"
+	    android:singleLine="true"
+        android:text="Chethan Kumar SN"
+        android:id="@+id/SingleContactName2"/>
+
+</LinearLayout>

@@ -28,7 +28,7 @@ import android.widget.Toast;
 public class ContactService extends Service {
 
 	public final IBinder mBinder = new LocalBinder();
-	public final Messenger mMessenger = new Messenger(new IncomingHandler());
+//	public final Messenger mMessenger = new Messenger(new IncomingHandler());
 
 	private static Cursor c;
 	private static ArrayList<String> nameNumber = new ArrayList<String>();
@@ -37,25 +37,12 @@ public class ContactService extends Service {
 	private static ArrayList<Integer> type = new ArrayList<Integer>();
 	private static ArrayList<String> contactPhotoList = new ArrayList<String>();
 	private static ArrayList<String> contactIdList = new ArrayList<String>();
-	private static Activity activity = null;
 	private static boolean isDataLoaded = false;
 	
-	class IncomingHandler extends Handler {
-        @Override
-        public void handleMessage(Message msg) {
-            
-        	Bundle data = msg.getData();        	
-        	String dataString = data.getString("MyString");
-        	activity = (Activity) data.get("activity");
-        	Toast.makeText(getApplicationContext(), 
-                     dataString, Toast.LENGTH_SHORT).show();
-        }
-     }
 	
 	@Override 
 	public IBinder onBind(Intent intent) {
-//		return mBinder;
-		return	mMessenger.getBinder();
+		return mBinder;
 	}
 	
 	public class LocalBinder extends Binder {
@@ -70,6 +57,8 @@ public class ContactService extends Service {
         Log.d("mylog", "inside onstartcommand. startid : "+startId);
         // We want this service to continue running until it is explicitly
         // stopped, so return sticky.
+        Log.d("mylog", "inside onstartcommand. is data loaded : "+isDataLoaded);
+        fillData();
         return START_STICKY;
     }
 	
@@ -110,18 +99,12 @@ public class ContactService extends Service {
 			return null;
 	}
 
-	public void fillData(Activity a){
-		if (activity==null) {
-			Log.d("mylog", "activity is null");
-			activity = a;
-		}else{
-			Log.d("mylog", "activity is NOT null");
-		}
+	public void fillData(){
 		if(!isDataLoaded){
 			Log.d("mylog", "isdataloaded is :"+isDataLoaded);
 			Uri allCalls = Uri.parse("content://call_log/calls");
 			String strOrder = android.provider.CallLog.Calls.DATE + " DESC"; 
-			c = activity.managedQuery(allCalls, null, null, null, strOrder);
+			c = getContentResolver().query(allCalls, null, null, null, strOrder);
 			
 			int number = c.getColumnIndex(CallLog.Calls.NUMBER);
 			int type = c.getColumnIndex(CallLog.Calls.TYPE);
@@ -138,20 +121,20 @@ public class ContactService extends Service {
 					this.type.add(dircode);
 				} while (c.moveToNext());
 			}
-			fillContactIdFromPhoneNumber(activity);
-			fillContactName(activity);
-			fillContactPhotoDetails(activity);
+			fillContactIdFromPhoneNumber();
+			fillContactName();
+			fillContactPhotoDetails();
 		}
 		 isDataLoaded=true;
 	 }
 	 
-	 private void fillContactPhotoDetails(Activity activity){
+	 private void fillContactPhotoDetails(){
 		 String contactid;
 		 for (int i = 0; i < contactIdList.size(); i++) {
 			 contactid = contactIdList.get(i);
 				Uri uri=null;
 				if(contactid!=null){
-					uri = getPhotoUri(activity,Long.parseLong(contactid));
+					uri = getPhotoUri(Long.parseLong(contactid));
 				}
 				if (uri != null) {
 					contactPhotoList.add(uri.toString());
@@ -162,12 +145,12 @@ public class ContactService extends Service {
 		 }
 	 }
 	 
-	 private void fillContactIdFromPhoneNumber(Activity activity) {
+	 private void fillContactIdFromPhoneNumber() {
 		 String contactId = "";
 		 for (int i = 0; i < nameNumber.size(); i++) {
 	         Uri uri = Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI,
 	                 Uri.encode(nameNumber.get(i)));
-	         Cursor cFetch = activity.getContentResolver().query(uri,
+	         Cursor cFetch = getContentResolver().query(uri,
 	                 new String[] { PhoneLookup.DISPLAY_NAME, PhoneLookup._ID },
 	                 null, null, null);
 	         
@@ -182,8 +165,8 @@ public class ContactService extends Service {
 		 }
     }
 	 
-	 public void fillContactName(Activity activity){
-		 ContentResolver contentResolver = activity.getContentResolver();
+	 public void fillContactName(){
+		 ContentResolver contentResolver = getContentResolver();
 		 Cursor cursor;
 		 for (int i = 0; i < contactIdList.size(); i++) {
 			try{
@@ -205,8 +188,8 @@ public class ContactService extends Service {
 		 }
 	 }
 
-    public Uri getPhotoUri(Activity activity,long contactId) {
-        ContentResolver contentResolver = activity.getContentResolver();
+    public Uri getPhotoUri(long contactId) {
+        ContentResolver contentResolver = getContentResolver();
         try {
             Cursor cursor = contentResolver
                     .query(ContactsContract.Data.CONTENT_URI,

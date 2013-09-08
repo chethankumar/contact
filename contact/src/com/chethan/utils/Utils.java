@@ -30,6 +30,20 @@ public class Utils {
 		return (size.x/3)-10;
 	}
 	
+	public static int getWidthForContact(Activity activity){
+		Display display = activity.getWindowManager().getDefaultDisplay();
+		Point size = new Point();
+		display.getSize(size);
+		return (size.x*8)/10;
+	}
+	
+	public static int getWidthForAlphabets(Activity activity){
+		Display display = activity.getWindowManager().getDefaultDisplay();
+		Point size = new Point();
+		display.getSize(size);
+		return (size.x*2)/10;
+	}
+	
 	public static int getHeightForCard(Activity activity) {
 		return getWidthForCard(activity)*4/3;
 	}
@@ -70,8 +84,8 @@ public class Utils {
 		ViewGroup.LayoutParams layoutParams =  new LayoutParams(Utils.getWidthForCard(activity),Utils.getHeightForCard(activity));
 		view.setLayoutParams(layoutParams);
 		ImageView photoImageView = (ImageView)view.findViewById(R.id.log_photo);
-		photoImageView.getLayoutParams().height=width-getPx(activity, 10);
-		photoImageView.getLayoutParams().width=width-getPx(activity, 10);
+		photoImageView.getLayoutParams().height=width-getPx(activity, 15);
+		photoImageView.getLayoutParams().width=width-getPx(activity, 15);
 		photoImageView.setImageResource(R.drawable.me);
 		TextView nameOrNumber = (TextView)view.findViewById(R.id.log_nameOrNumber);
 		nameOrNumber.setText(nameNumber);

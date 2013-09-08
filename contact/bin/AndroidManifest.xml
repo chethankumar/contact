@@ -32,11 +32,10 @@
             </intent-filter>
         </activity>
         <service android:name="com.chethan.services.ContactService"
-            android:enabled="true"
-            android:process=":contact_service">
-            <intent-filter>
+            android:enabled="true">
+            <!-- <intent-filter>
                 <action android:name="com.chethan.serviceContact" />
-          </intent-filter>
+          </intent-filter> -->
         </service>
     </application>
 

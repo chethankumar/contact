@@ -5,6 +5,9 @@ import java.util.List;
 
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -37,7 +40,8 @@ import com.parse.SignUpCallback;
 public class MainActivity extends FragmentActivity {
 
 	MyPageAdapter pageAdapter;
-	public static ContactService contactService;
+//	public static ContactService contactService;
+	public static ContactService contactService = null;
 	public boolean mIsBound = false;
 
 	private ServiceConnection serviceConnection = new ServiceConnection() {
@@ -49,7 +53,7 @@ public class MainActivity extends FragmentActivity {
 	        // service that we know is running in our own process, we can
 	        // cast its IBinder to a concrete class and directly access it.
 	        contactService = ((ContactService.LocalBinder)service).getService();
-	        mIsBound=true;
+	    	mIsBound=true;
 	        customInitSequence();
 	    }
 
@@ -59,7 +63,7 @@ public class MainActivity extends FragmentActivity {
 	        // unexpectedly disconnected -- that is, its process crashed.
 	        // Because it is running in our same process, we should never
 	        // see this happen.
-	        //contactService = null;
+	        contactService = null;
 	    	mIsBound=false;
 	    }
 
@@ -82,11 +86,10 @@ public class MainActivity extends FragmentActivity {
 		
 		Intent service = new Intent(getApplicationContext(), ContactService.class);
 		getApplicationContext().startService(service);
-		getApplicationContext().bindService(service, serviceConnection, 0);
+		getApplicationContext().bindService(service, serviceConnection, Context.BIND_AUTO_CREATE);
+		
 	    mIsBound = true;
 
-	    //doBindService();
-		
 //		ParseAnalytics.trackAppOpened(getIntent());
 		//------------------------------------------
 		
@@ -157,7 +160,7 @@ public class MainActivity extends FragmentActivity {
 		  List<Fragment> fList = new ArrayList<Fragment>();
 		  fList.add(PhoneFragment.newInstance("Dialer"));
 		  fList.add(CalllogFragment.newInstance(contactService)); 
-		  fList.add(MyFragment.newInstance("Groups"));
+		  fList.add(PeopleFragment.newInstance(contactService));
 		  fList.add(MyFragment.newInstance("Me"));
 		  return fList;
 	}
@@ -189,27 +192,9 @@ public class MainActivity extends FragmentActivity {
 		  }
 	}
 
-	void doBindService() {
-	    // Establish a connection with the service.  We use an explicit
-	    // class name because we want a specific service implementation that
-	    // we know will be running in our own process (and thus won't be
-	    // supporting component replacement by other applications).
-	    bindService(new Intent(MainActivity.this, 
-	            ContactService.class), serviceConnection, Context.BIND_AUTO_CREATE);
-	    mIsBound = true;
-	}
-
-	void doUnbindService() {
-	    if (mIsBound) {
-	        // Detach our existing connection.
-	        unbindService(serviceConnection);
-	        mIsBound = false;
-	    }
-	}
 
 	@Override
 	protected void onDestroy() {
 	    super.onDestroy();
-	    //doUnbindService();
 	}
 }

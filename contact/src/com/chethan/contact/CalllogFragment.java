@@ -10,12 +10,15 @@ import com.nostra13.universalimageloader.core.assist.PauseOnScrollListener;
 
 import android.content.ContentResolver;
 import android.content.ContentUris;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Messenger;
+import android.os.Vibrator;
 import android.provider.CallLog;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.PhoneLookup;
@@ -33,25 +36,20 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class CalllogFragment extends Fragment {
 
 	public static final String EXTRA_MESSAGE = "EXTRA_MESSAGE";
 	public static ContactService contactService;
-	private Cursor c;
 	private ArrayList<String> nameNumber = new ArrayList<String>();
 	private ArrayList<String> names = new ArrayList<String>();
 	private ArrayList<Date> dates = new ArrayList<Date>();
 	private ArrayList<Integer> type = new ArrayList<Integer>();
 	private ArrayList<String> contactPhotoList = new ArrayList<String>();
-	private ArrayList<String> contactIdList = new ArrayList<String>();
+	private Vibrator myVib;
 	public static final CalllogFragment newInstance(ContactService service)
 	 {
 		CalllogFragment f = new CalllogFragment();
-//	   Bundle bdl = new Bundle(1);
-//	   bdl.put(contactService, service);
-//	   f.setArguments(bdl);
 	   contactService=service;
 	   return f;
 	 }
@@ -61,18 +59,15 @@ public class CalllogFragment extends Fragment {
 	   Bundle savedInstanceState) {
 	   View v = inflater.inflate(R.layout.call_log, container, false);
 	   
-//	   GridLayout callLogGridLayout = (GridLayout)v.findViewById(R.id.call_log_grid);
-	   
 	   	GridView gridView = (GridView)v.findViewById(R.id.gridView);
+	   	myVib = (Vibrator) getActivity().getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
 	   
-	  // 	fillData();
-	   	contactService.fillData(getActivity());
+	   	contactService.fillData();
 	   	nameNumber = contactService.getNameNumber();
 	   	names = contactService.getNames();
 	   	dates = contactService.getDates();
 	   	type = contactService.getType();
 	   	contactPhotoList = contactService.getContactPhotoList();
-	   	contactIdList = contactService.getContactIdList();
 //------------------------------------
 	   	boolean pauseOnScroll = true; // or true
 	   	boolean pauseOnFling = true; // or false
@@ -87,6 +82,7 @@ public class CalllogFragment extends Fragment {
 				String url = "tel:"+nameNumber.get(position).toString();
 				Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse(url));
 				startActivity(intent);
+				myVib.vibrate(50);
 			}
 		});
 	   	
@@ -352,7 +348,17 @@ public class CalllogFragment extends Fragment {
 //                 ContactsContract.Contacts.Photo.CONTENT_DIRECTORY);
 //     }
 	 
-	 static class ViewHolder{
+	 @Override
+	public void onResume() {
+		super.onResume();
+		nameNumber = contactService.getNameNumber();
+	   	names = contactService.getNames();
+	   	dates = contactService.getDates();
+	   	type = contactService.getType();
+	   	contactPhotoList = contactService.getContactPhotoList();
+	}
+
+	static class ViewHolder{
 		 ImageView photoImageView;
 		 TextView nameOrNumber;
 		 TextView logDate;
