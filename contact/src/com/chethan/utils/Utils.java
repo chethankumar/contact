@@ -44,6 +44,13 @@ public class Utils {
 		return (size.x*2)/10;
 	}
 	
+	public static int getScreenHeight(Activity activity){
+		Display display = activity.getWindowManager().getDefaultDisplay();
+		Point size = new Point();
+		display.getSize(size);
+		return size.y - getPx(activity, 75);
+	}
+	
 	public static int getHeightForCard(Activity activity) {
 		return getWidthForCard(activity)*4/3;
 	}

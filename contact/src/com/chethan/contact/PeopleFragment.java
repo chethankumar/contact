@@ -1,8 +1,12 @@
 package com.chethan.contact;
 
+import java.util.ArrayList;
+
 import com.chethan.services.ContactService;
 import com.chethan.utils.Utils;
 
+import android.R.integer;
+import android.graphics.AvoidXfermode.Mode;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.DragEvent;
@@ -25,6 +29,14 @@ import android.widget.TextView;
 public class PeopleFragment extends Fragment {
 
 	public static ContactService contactService;
+	private ArrayList<String> contactNameList = new ArrayList<String>();
+	private int contactListPosition = 0;
+	
+	private TextView contact_2;
+	private TextView contact_1;
+	private TextView contact;
+	private TextView contact1;
+	private TextView contact2;
 	
 	public static final PeopleFragment newInstance(ContactService service)
 	 {
@@ -45,6 +57,15 @@ public class PeopleFragment extends Fragment {
 		android.widget.LinearLayout.LayoutParams alphabets_params = new LinearLayout.LayoutParams(Utils.getWidthForAlphabets(getActivity()), android.widget.FrameLayout.LayoutParams.MATCH_PARENT);
 		textView.setLayoutParams(alphabets_params);
 		
+		contact_2 = (TextView)view.findViewById(R.id.SingleContactName_2);
+		contact_1 = (TextView)view.findViewById(R.id.SingleContactName_1);
+		contact = (TextView)view.findViewById(R.id.SingleContactName);
+		contact1 = (TextView)view.findViewById(R.id.SingleContactName1);
+		contact2 = (TextView)view.findViewById(R.id.SingleContactName2);
+		
+		contactNameList = contactService.getContactNameList();
+		scroll();
+		
 		view.setOnTouchListener(new OnTouchListener() {
 			
 			@Override
@@ -53,11 +74,18 @@ public class PeopleFragment extends Fragment {
 				case MotionEvent.ACTION_MOVE:
 					if(arg1.getY()>(singleContact.getY()+singleContact.getHeight())){
 						singleContact.setTranslationY(singleContact.getY()+10);
+						contactListPosition++;
+						scroll();
 					}else if(arg1.getY()<(singleContact.getY())){
 						singleContact.setTranslationY(singleContact.getY()-10);
+						contactListPosition--;
+						scroll();
 					}
 					else{
 						singleContact.setTranslationY(arg1.getY()-singleContact.getHeight()/2);
+						float step = (Utils.getScreenHeight(getActivity())/contactNameList.size());
+						contactListPosition = (int)(arg1.getY()/step);
+						scroll();
 					}
 					break;
 
@@ -70,6 +98,41 @@ public class PeopleFragment extends Fragment {
 		});
 		
 		return view;
+	}
+	
+	private void scroll(){
+		
+		if(contactListPosition>contactNameList.size())
+			contactListPosition=contactNameList.size()-1;
+		
+		if(contactListPosition<0)
+			contactListPosition=0;
+		int position = contactListPosition;
+	//	contactListPosition=position;
+		
+		if(position>2 && position<contactNameList.size()){
+			contact_2.setText(contactNameList.get(position-2));
+		}else{
+			contact_2.setText("");
+		}
+		if(position>1 && position<contactNameList.size()){
+			contact_1.setText(contactNameList.get(position-1));
+		}else{
+			contact_1.setText("");
+		}
+		if(position>=0 && position<contactNameList.size()){
+			contact.setText(contactNameList.get(position));
+		}
+		if(position+1<contactNameList.size()){
+			contact1.setText(contactNameList.get(position+1));
+		}else{
+			contact1.setText("");
+		}
+		if(position+2<contactNameList.size()){
+			contact2.setText(contactNameList.get(position+2));
+		}else {
+			contact2.setText("");
+		}
 	}
 	
 }

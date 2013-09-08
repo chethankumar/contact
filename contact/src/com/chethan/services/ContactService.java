@@ -1,7 +1,11 @@
 package com.chethan.services;
 
+import java.lang.reflect.Array;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 
 import com.chethan.contact.MainActivity;
 
@@ -37,6 +41,7 @@ public class ContactService extends Service {
 	private static ArrayList<Integer> type = new ArrayList<Integer>();
 	private static ArrayList<String> contactPhotoList = new ArrayList<String>();
 	private static ArrayList<String> contactIdList = new ArrayList<String>();
+	private static ArrayList<String> contactNameList = new ArrayList<String>();
 	private static boolean isDataLoaded = false;
 	
 	
@@ -221,5 +226,62 @@ public class ContactService extends Service {
                 ContactsContract.Contacts.CONTENT_URI, contactId);
         return Uri.withAppendedPath(person,
                 ContactsContract.Contacts.Photo.CONTENT_DIRECTORY);
+    }
+    
+    public ArrayList<String> getContactNameList(){
+    	String[] list = {"Susana" 
+    	                  ,"Bari"  
+    	                  ,"Theresia"  
+    	                  ,"Mike"
+    	                  ,"Bronwyn"  
+    	                  ,"Palmer"  
+    	                  ,"Hannah"  
+    	                  ,"Kit"  
+    	                  ,"Fredericka"  
+    	                  ,"Belinda"
+    	                  ,"Alishia"  
+    	                  ,"Diedra"  
+    	                  ,"Rosalia"  
+    	                  ,"Vivan"  
+    	                  ,"Molly"  
+    	                  ,"Alvina"  
+    	                  ,"Chas"  
+    	                  ,"Marylee"  
+    	                  ,"Dolly"  
+    	                  ,"Merri"  
+    	                  ,"Prudence"  
+    	                  ,"Shelli"  
+    	                  ,"Jovita"  
+    	                  ,"Kathey"  
+    	                  ,"Yael"  
+    	                  ,"Elouise"  
+    	                  ,"Donn"  
+    	                  ,"Hilde"  
+    	                  ,"Lulu"  
+    	                  ,"Justa"  
+    	                  ,"Aracely"  
+    	                  ,"Ammie"  
+    	                  ,"Bert"  
+    	                  ,"Janeen"  
+    	                  ,"Walton"  
+    	                  ,"Mignon"  
+    	                  ,"Earline"  
+    	                  ,"Silvana"  
+    	                  ,"Danae"  
+    	                  ,"Alyson"  
+    	                  ,"Adelia"  
+    	                  ,"Angel"  
+    	                  ,"Sommer"  
+    	                  ,"Leo"  
+    	                  ,"Jaimee"  
+    	                  ,"Luci"  
+    	                  ,"Kia"  
+    	                  ,"Doreen"  
+    	                  ,"Clementina"  
+    	                  ,"Rebekah"};
+    	
+    	contactNameList = new ArrayList<String>(Arrays.asList(list));
+    	Collections.sort(contactNameList);
+    	return contactNameList;
     }
 }
