@@ -7,8 +7,12 @@ import com.chethan.utils.Utils;
 
 import android.R.integer;
 import android.graphics.AvoidXfermode.Mode;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -37,6 +41,7 @@ public class PeopleFragment extends Fragment {
 	private TextView contact;
 	private TextView contact1;
 	private TextView contact2;
+	private TextView alphabetTextView;
 	
 	public static final PeopleFragment newInstance(ContactService service)
 	 {
@@ -62,6 +67,7 @@ public class PeopleFragment extends Fragment {
 		contact = (TextView)view.findViewById(R.id.SingleContactName);
 		contact1 = (TextView)view.findViewById(R.id.SingleContactName1);
 		contact2 = (TextView)view.findViewById(R.id.SingleContactName2);
+		alphabetTextView = (TextView)view.findViewById(R.id.alphabets);
 		
 		contactNameList = contactService.getContactNameList();
 		scroll();
@@ -102,7 +108,7 @@ public class PeopleFragment extends Fragment {
 	
 	private void scroll(){
 		
-		if(contactListPosition>contactNameList.size())
+		if(contactListPosition>=contactNameList.size())
 			contactListPosition=contactNameList.size()-1;
 		
 		if(contactListPosition<0)
@@ -133,6 +139,17 @@ public class PeopleFragment extends Fragment {
 		}else {
 			contact2.setText("");
 		}
+		
+		highlightAlphabets();
+	}
+	
+	private void highlightAlphabets(){
+		String textToHighlight = contactNameList.get(contactListPosition).substring(0, 1);
+//		String.replaceAll(textToHighlight,<font color="red">textToHighlight</font>);
+		Spannable WordtoSpan = new SpannableString("A\nB\nC\nD\nE\nF\nG\nH\nI\nJ\nK\nL\nM\nN\nO\nP\nQ\nR\nS\nT\nU\nV\nW\nX\nY\nZ");        
+		WordtoSpan.setSpan(new ForegroundColorSpan(Color.parseColor("#00B4FF")), WordtoSpan.toString().indexOf(textToHighlight), WordtoSpan.toString().indexOf(textToHighlight)+1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		alphabetTextView.setText(WordtoSpan);
+//		Textview.setText(Html.fromHtml(String));
 	}
 	
 }
