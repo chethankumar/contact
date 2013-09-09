@@ -86,8 +86,8 @@ public class PeopleFragment extends Fragment {
 		contact_1.setTypeface(Utils.getSegoeTypeface(getActivity()));
 		contact_2.setTypeface(Utils.getSegoeTypeface(getActivity()));
 		
-		contactNameList = contactService.getContactNameList();
-		scroll();
+//		contactNameList = contactService.getContactNameList();
+//		scroll();
 		
 		view.setOnTouchListener(new OnTouchListener() {
 			
@@ -155,6 +155,21 @@ public class PeopleFragment extends Fragment {
 //		});
 		
 		return view;
+		
+	}
+	
+	@Override
+	public void setUserVisibleHint(boolean isVisibleToUser) {
+	super.setUserVisibleHint(isVisibleToUser);
+
+	if (isVisibleToUser) {
+		contactNameList = contactService.getContactNameList();
+		scroll();
+	}
+	else {  
+		
+	}
+
 	}
 	
 	private void scroll(){
@@ -197,10 +212,12 @@ public class PeopleFragment extends Fragment {
 	private void highlightAlphabets(){
 		String textToHighlight = contactNameList.get(contactListPosition).substring(0, 1);
 		Spannable WordtoSpan = new SpannableString("A\nB\nC\nD\nE\nF\nG\nH\nI\nJ\nK\nL\nM\nN\nO\nP\nQ\nR\nS\nT\nU\nV\nW\nX\nY\nZ");        
-		WordtoSpan.setSpan(new ForegroundColorSpan(Color.parseColor("#1E29D8")), WordtoSpan.toString().indexOf(textToHighlight), WordtoSpan.toString().indexOf(textToHighlight)+1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-		WordtoSpan.setSpan(new android.text.style.BackgroundColorSpan(Color.parseColor("#CDCDEE")), WordtoSpan.toString().indexOf(textToHighlight), WordtoSpan.toString().indexOf(textToHighlight)+1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-		WordtoSpan.setSpan(new android.text.style.TypefaceSpan("serief"), WordtoSpan.toString().indexOf(textToHighlight), WordtoSpan.toString().indexOf(textToHighlight)+1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-		alphabetTextView.setText(WordtoSpan);
+		if(WordtoSpan.toString().indexOf(textToHighlight)!=-1){
+			WordtoSpan.setSpan(new ForegroundColorSpan(Color.parseColor("#1E29D8")), WordtoSpan.toString().indexOf(textToHighlight), WordtoSpan.toString().indexOf(textToHighlight)+1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+			WordtoSpan.setSpan(new android.text.style.BackgroundColorSpan(Color.parseColor("#CDCDEE")), WordtoSpan.toString().indexOf(textToHighlight), WordtoSpan.toString().indexOf(textToHighlight)+1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+			WordtoSpan.setSpan(new android.text.style.TypefaceSpan("serief"), WordtoSpan.toString().indexOf(textToHighlight), WordtoSpan.toString().indexOf(textToHighlight)+1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+			alphabetTextView.setText(WordtoSpan);
+		}
 	}
 	
 }
