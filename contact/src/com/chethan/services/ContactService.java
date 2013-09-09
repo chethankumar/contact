@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 import com.chethan.contact.MainActivity;
+import com.chethan.objects.CallHistory;
 import com.chethan.objects.Person;
 import com.chethan.objects.SimpleContact;
 
@@ -47,6 +48,7 @@ public class ContactService extends Service {
 	private static boolean isDataLoaded = false;
 	private static ArrayList<Person> personList = new ArrayList<Person>();
 	private static ArrayList<SimpleContact> simpleContactList = new ArrayList<SimpleContact>();
+	private static ArrayList<CallHistory> callHistoryList = new ArrayList<CallHistory>();
 	
 	@Override 
 	public IBinder onBind(Intent intent) {
@@ -68,7 +70,7 @@ public class ContactService extends Service {
         Log.d("mylog", "inside onstartcommand. is data loaded : "+isDataLoaded);
         //readContacts();
         getAllContactsNames();
-        fillData();
+        populateCallLogData();//populatecalllogdata should be called after allcontact names because of dependency
         return START_STICKY;
     }
 	
@@ -108,10 +110,17 @@ public class ContactService extends Service {
 		else 
 			return null;
 	}
-
-	public void fillData(){
+	
+	public ArrayList<CallHistory> getCallLogData(){
+		if(isDataLoaded)
+			return callHistoryList;
+		else 
+			return null;
+	}
+	
+	public void populateCallLogData(){
 		if(!isDataLoaded){
-			Log.d("mylog", "isdataloaded is :"+isDataLoaded);
+			Log.d("mylog", "get calllog data isdataloaded is :"+isDataLoaded);
 			Uri allCalls = Uri.parse("content://call_log/calls");
 			String strOrder = android.provider.CallLog.Calls.DATE + " DESC" + " limit "+99; 
 			c = getContentResolver().query(allCalls, null, null, null, strOrder);
@@ -121,118 +130,54 @@ public class ContactService extends Service {
 			int date = c.getColumnIndex(CallLog.Calls.DATE);
 			if(c.moveToFirst()){
 				do {
+					CallHistory callHistory = new CallHistory();
 					String phNumber = c.getString(number);
 					String callType = c.getString(type);
 					String callDate = c.getString(date);
 					Date callDayTime = new Date(Long.valueOf(callDate));
 					int dircode = Integer.parseInt(callType);
-					nameNumber.add(phNumber);
-					dates.add(callDayTime);
-					this.type.add(dircode);
+					callHistory.setPhoneNumber(phNumber);
+					callHistory.setDate(callDayTime);
+					callHistory.setType(dircode);
+					callHistoryList.add(callHistory);
 				} while (c.moveToNext());
 			}
-			fillContactIdFromPhoneNumber();
-			fillContactName();
-			fillContactPhotoDetails();
+			
+			//adding contact ids
+			
+			 for (int i = 0; i < callHistoryList.size(); i++) {
+		         Uri uri = Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI,
+		                 Uri.encode(callHistoryList.get(i).getPhoneNumber()));
+		         Cursor cFetch = getContentResolver().query(uri,
+		                 new String[] { PhoneLookup.DISPLAY_NAME, PhoneLookup._ID },
+		                 null, null, null);
+		         String contactId = "";
+		         if (cFetch.moveToFirst()) {
+		             cFetch.moveToFirst();
+		                 contactId = cFetch.getString(cFetch
+		                         .getColumnIndex(PhoneLookup._ID));
+		                 callHistoryList.get(i).setId(contactId);
+		         }else{
+		        	 callHistoryList.get(i).setId(null);
+		         }
+			 }
+			 
+			 //adding names and photo
+			 for (int i = 0; i < callHistoryList.size(); i++) {
+				if (callHistoryList.get(i).getId()!=null) {
+					for (int j = 0; j < simpleContactList.size(); j++) {
+						if (callHistoryList.get(i).getId().equalsIgnoreCase(simpleContactList.get(j).getId())) {
+							callHistoryList.get(i).setName(simpleContactList.get(j).getName());
+							callHistoryList.get(i).setPhoto(simpleContactList.get(j).getPhoto());
+							break;
+						}
+					}
+				}
+			}
 		}
 		 isDataLoaded=true;
-	 }
-	 
-	 private void fillContactPhotoDetails(){
-		 String contactid;
-		 for (int i = 0; i < contactIdList.size(); i++) {
-			 contactid = contactIdList.get(i);
-				Uri uri=null;
-				if(contactid!=null){
-					uri = getPhotoUri(Long.parseLong(contactid));
-				}
-				if (uri != null) {
-					contactPhotoList.add(uri.toString());
-	         } 
-				else {
-					contactPhotoList.add(null);
-	         }
-		 }
-	 }
-	 
-	 private void fillContactIdFromPhoneNumber() {
-		 String contactId = "";
-		 for (int i = 0; i < nameNumber.size(); i++) {
-	         Uri uri = Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI,
-	                 Uri.encode(nameNumber.get(i)));
-	         Cursor cFetch = getContentResolver().query(uri,
-	                 new String[] { PhoneLookup.DISPLAY_NAME, PhoneLookup._ID },
-	                 null, null, null);
-	         
-	         if (cFetch.moveToFirst()) {
-	             cFetch.moveToFirst();
-	                 contactId = cFetch.getString(cFetch
-	                         .getColumnIndex(PhoneLookup._ID));
-	                 contactIdList.add(contactId);
-	         }else{
-	        	 contactIdList.add(null);
-	         }
-		 }
-    }
-	 
-	 public void fillContactName(){
-		 ContentResolver contentResolver = getContentResolver();
-		 Cursor cursor;
-		 for (int i = 0; i < contactIdList.size(); i++) {
-			try{
-				 cursor = contentResolver.query(
-		                 ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-		                 null,
-		                 ContactsContract.CommonDataKinds.Phone.CONTACT_ID +" = ?",
-		                 new String[]{contactIdList.get(i)}, null);
-				 if (cursor != null) {
-		             if (cursor.moveToFirst()) {
-		             }
-		         } 
-				 names.add(cursor.getString(cursor.getColumnIndex((ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))));
-	
-			}catch (Exception e) {
-	            e.printStackTrace();
-	            names.add(null);
-	        }
-		 }
-	 }
+	}
 
-    public Uri getPhotoUri(long contactId) {
-        ContentResolver contentResolver = getContentResolver();
-        try {
-            Cursor cursor = contentResolver
-                    .query(ContactsContract.Data.CONTENT_URI,
-                            null,
-                            ContactsContract.Data.CONTACT_ID
-                                    + "="
-                                    + contactId
-                                    + " AND "
-
-                                    + ContactsContract.Data.MIMETYPE
-                                    + "='"
-                                    + ContactsContract.CommonDataKinds.Photo.CONTENT_ITEM_TYPE
-                                    + "'", null, null);
-
-            if (cursor != null) {
-                if (!cursor.moveToFirst()) {
-                    return null; // no photo
-                }
-            } else {
-                return null; // error in cursor process
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-
-        Uri person = ContentUris.withAppendedId(
-                ContactsContract.Contacts.CONTENT_URI, contactId);
-        return Uri.withAppendedPath(person,
-                ContactsContract.Contacts.Photo.CONTENT_DIRECTORY);
-    }
-    
     public ArrayList<String> getContactNameList(){
     	String[] list = {"Susana" 
     	                  ,"Bari"  

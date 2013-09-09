@@ -4,7 +4,7 @@ import java.sql.Date;
 
 import android.net.Uri;
 
-public class CallLog {
+public class CallHistory {
 
 	private String id;
 	private String name;
