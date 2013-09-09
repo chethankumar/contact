@@ -147,13 +147,13 @@ public class MainActivity extends FragmentActivity {
 	
 	private void initTabs(){
 		TextView textView = (TextView)findViewById(R.id.phone);
-		textView.setTypeface(Utils.getTitleTypeface(this));
+		textView.setTypeface(Utils.getSegoeTypeface(this));
 		textView = (TextView)findViewById(R.id.log);
-		textView.setTypeface(Utils.getTitleTypeface(this));
+		textView.setTypeface(Utils.getSegoeTypeface(this));
 		textView = (TextView)findViewById(R.id.contacts);
-		textView.setTypeface(Utils.getTitleTypeface(this));
+		textView.setTypeface(Utils.getSegoeTypeface(this));
 		textView = (TextView)findViewById(R.id.me);
-		textView.setTypeface(Utils.getTitleTypeface(this));
+		textView.setTypeface(Utils.getSegoeTypeface(this));
 	}
 	
 	private List<Fragment> getFragments(){

@@ -10,8 +10,8 @@
         android:gravity="center_horizontal"
         android:paddingLeft="2dp"
         android:paddingRight="2dp"
-        android:textSize="18sp"
-        android:textColor="#515151"
+        android:textSize="16sp"
+        android:textColor="#82837E"
         android:id="@+id/alphabets"
         android:text="A\nB\nC\nD\nE\nF\nG\nH\nI\nJ\nK\nL\nM\nN\nO\nP\nQ\nR\nS\nT\nU\nV\nW\nX\nY\nZ"/>
     

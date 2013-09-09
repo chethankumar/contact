@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 
 import com.chethan.contact.R;
 
-import android.R.integer;
 import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.Point;
@@ -72,11 +71,19 @@ public class Utils {
 	}
 	
 	public static Typeface getLightTypeface(Activity activity) {
-		return Typeface.createFromAsset(activity.getAssets(),"Ubuntu-L.ttf");
+		return Typeface.createFromAsset(activity.getAssets(),"segoeuil.ttf");
 	}
 	
 	public static Typeface getSubtitleTypeface(Activity activity) {
 		return Typeface.createFromAsset(activity.getAssets(),"Ubuntu-R.ttf");
+	}
+	
+	public static Typeface getSegoeTypeface(Activity activity) {
+		return Typeface.createFromAsset(activity.getAssets(),"segoeui.ttf");
+	}
+	
+	public static Typeface getSegoeSemiBoldTypeface(Activity activity) {
+		return Typeface.createFromAsset(activity.getAssets(),"seguisb.ttf");
 	}
 	
 	public static int getPx(Activity activity,int dps){

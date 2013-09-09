@@ -108,7 +108,7 @@ public class ContactService extends Service {
 		if(!isDataLoaded){
 			Log.d("mylog", "isdataloaded is :"+isDataLoaded);
 			Uri allCalls = Uri.parse("content://call_log/calls");
-			String strOrder = android.provider.CallLog.Calls.DATE + " DESC"; 
+			String strOrder = android.provider.CallLog.Calls.DATE + " DESC" + " limit "+99; 
 			c = getContentResolver().query(allCalls, null, null, null, strOrder);
 			
 			int number = c.getColumnIndex(CallLog.Calls.NUMBER);
@@ -278,7 +278,57 @@ public class ContactService extends Service {
     	                  ,"Kia"  
     	                  ,"Doreen"  
     	                  ,"Clementina"  
-    	                  ,"Rebekah"};
+    	                  ,"Rebekah"
+    	                  ,"Galen"
+    	                  ,"Angle"  
+    	                  ,"Annie"  
+    	                  ,"Stefany"  
+    	                  ,"Elvina"  
+    	                  ,"Laquanda"  
+    	                  ,"Nakia"  
+    	                  ,"Ardith"  
+    	                  ,"Logan"  
+    	                  ,"Tyler"  
+    	                  ,"Dorris"  
+    	                  ,"Gerri"  
+    	                  ,"Paulene"  
+    	                  ,"Annalisa"  
+    	                  ,"Vesta"  
+    	                  ,"Eldora"  
+    	                  ,"Beula"  
+    	                  ,"Les"  
+    	                  ,"Sun"  
+    	                  ,"Herman"  
+    	                  ,"Hermila"  
+    	                  ,"Francisca"  
+    	                  ,"Shawnda"  
+    	                  ,"Mireille"  
+    	                  ,"Catina"  
+    	                  ,"Gavin"  
+    	                  ,"Yolanda"  
+    	                  ,"Carlee"  
+    	                  ,"Willian"  
+    	                  ,"Lashonda"  
+    	                  ,"Calista"  
+    	                  ,"Hollis"  
+    	                  ,"Setsuko"  
+    	                  ,"Markita"  
+    	                  ,"Arden"  
+    	                  ,"Corrina"  
+    	                  ,"Vivien"  
+    	                  ,"Edda"  
+    	                  ,"Francesco"  
+    	                  ,"Alejandra"  
+    	                  ,"Gaye"  
+    	                  ,"Merrill"  
+    	                  ,"Pok"  
+    	                  ,"Collene"  
+    	                  ,"Lorena"  
+    	                  ,"Trena"  
+    	                  ,"Larissa"  
+    	                  ,"Reatha"  
+    	                  ,"Carmina"  
+    	                  ,"Thurman"  };
     	
     	contactNameList = new ArrayList<String>(Arrays.asList(list));
     	Collections.sort(contactNameList);

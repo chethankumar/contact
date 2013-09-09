@@ -128,14 +128,14 @@ public class CalllogFragment extends Fragment {
 					viewHolder = new ViewHolder();
 					mygridView.setLayoutParams(new AbsListView.LayoutParams(Utils.getWidthForCard(getActivity()),Utils.getHeightForCard(getActivity())));
 					viewHolder.photoImageView = (ImageView)mygridView.findViewById(R.id.log_photo);
-					viewHolder.photoImageView.getLayoutParams().height=width-Utils.getPx(getActivity(), 10);
-					viewHolder.photoImageView.getLayoutParams().width=width-Utils.getPx(getActivity(), 10);
+					viewHolder.photoImageView.getLayoutParams().height=width-Utils.getPx(getActivity(), 15);
+					viewHolder.photoImageView.getLayoutParams().width=width-Utils.getPx(getActivity(), 15);
 					viewHolder.nameOrNumber = (TextView)mygridView.findViewById(R.id.log_nameOrNumber);
-					viewHolder.nameOrNumber.setTypeface(Utils.getPhoneTypeface(getActivity()));
+					viewHolder.nameOrNumber.setTypeface(Utils.getSegoeTypeface(getActivity()));
 					viewHolder.logDate = (TextView)mygridView.findViewById(R.id.log_date);
-					viewHolder.logDate.setTypeface(Utils.getSubtitleTypeface(getActivity()));
+					viewHolder.logDate.setTypeface(Utils.getSegoeTypeface(getActivity()));
 					viewHolder.logTime = (TextView)mygridView.findViewById(R.id.log_time);
-					viewHolder.logTime.setTypeface(Utils.getSubtitleTypeface(getActivity()));
+					viewHolder.logTime.setTypeface(Utils.getSegoeTypeface(getActivity()));
 					viewHolder.photoImageView.setImageResource(R.drawable.contact);
 					mygridView.setTag(viewHolder);
 				}else{
@@ -156,15 +156,15 @@ public class CalllogFragment extends Fragment {
 						
 						switch (CalllogFragment.this.type.get(arg0)) {
 						case CallLog.Calls.OUTGOING_TYPE:
-							viewHolder.nameOrNumber.setTextColor(Color.parseColor("#8FBE00"));
-							viewHolder.logDate.setTextColor(Color.parseColor("#8FBE00"));
-							viewHolder.logTime.setTextColor(Color.parseColor("#8FBE00"));
+							viewHolder.nameOrNumber.setTextColor(Color.parseColor("#007304"));
+							viewHolder.logDate.setTextColor(Color.parseColor("#007304"));
+							viewHolder.logTime.setTextColor(Color.parseColor("#007304"));
 							break;
 							
 						case CallLog.Calls.INCOMING_TYPE:
-							viewHolder.nameOrNumber.setTextColor(Color.parseColor("#00A8C6"));
-							viewHolder.logDate.setTextColor(Color.parseColor("#00A8C6"));
-							viewHolder.logTime.setTextColor(Color.parseColor("#00A8C6"));
+							viewHolder.nameOrNumber.setTextColor(Color.parseColor("#0A13DF"));
+							viewHolder.logDate.setTextColor(Color.parseColor("#0A13DF"));
+							viewHolder.logTime.setTextColor(Color.parseColor("#0A13DF"));
 							break;
 							
 						case CallLog.Calls.MISSED_TYPE:
