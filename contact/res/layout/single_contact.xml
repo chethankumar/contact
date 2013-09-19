@@ -38,7 +38,6 @@
             android:layout_height="32dp"
             android:id="@+id/singleContact_msg"
             android:src="@drawable/me3"/>
-        getPhoneTypeface
         <TextView 
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

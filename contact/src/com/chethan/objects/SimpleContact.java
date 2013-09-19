@@ -1,8 +1,10 @@
 package com.chethan.objects;
 
+import java.util.Comparator;
+
 import android.net.Uri;
 
-public class SimpleContact {
+public class SimpleContact implements Comparable<SimpleContact> {
 
 	private String id;
 	private String name;
@@ -32,4 +34,13 @@ public class SimpleContact {
 		this.photo = photo;
 	}
 
+	@Override
+	public int compareTo(SimpleContact arg0) {
+		if(arg0.name!=null && this.name!=null){
+			String arg1 = arg0.getName();
+			return 	this.name.compareTo(arg1);
+		}
+		return -1;
+	}
+	
 }

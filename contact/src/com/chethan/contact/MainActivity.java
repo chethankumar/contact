@@ -161,7 +161,7 @@ public class MainActivity extends FragmentActivity {
 		  fList.add(PhoneFragment.newInstance("Dialer"));
 		  fList.add(CalllogFragment.newInstance(contactService)); 
 		  fList.add(PeopleFragment.newInstance(contactService));
-		  fList.add(MyFragment.newInstance("Me"));
+		  fList.add(MeFragment.newInstance(contactService));
 		  return fList;
 	}
 

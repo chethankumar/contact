@@ -1,36 +1,25 @@
 package com.chethan.services;
 
-import java.lang.reflect.Array;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 
-import com.chethan.contact.MainActivity;
-import com.chethan.objects.CallHistory;
-import com.chethan.objects.Person;
-import com.chethan.objects.SimpleContact;
-
-import android.R.string;
-import android.app.Activity;
 import android.app.Service;
 import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Binder;
-import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Message;
-import android.os.Messenger;
 import android.provider.CallLog;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.PhoneLookup;
 import android.util.Log;
-import android.widget.Toast;
+
+import com.chethan.objects.CallHistory;
+import com.chethan.objects.Person;
+import com.chethan.objects.SimpleContact;
 
 public class ContactService extends Service {
 
@@ -38,13 +27,6 @@ public class ContactService extends Service {
 //	public final Messenger mMessenger = new Messenger(new IncomingHandler());
 
 	private static Cursor c;
-	private static ArrayList<String> nameNumber = new ArrayList<String>();
-	private static ArrayList<String> names = new ArrayList<String>();
-	private static ArrayList<Date> dates = new ArrayList<Date>();
-	private static ArrayList<Integer> type = new ArrayList<Integer>();
-	private static ArrayList<String> contactPhotoList = new ArrayList<String>();
-	private static ArrayList<String> contactIdList = new ArrayList<String>();
-	private static ArrayList<String> contactNameList = new ArrayList<String>();
 	private static boolean isDataLoaded = false;
 	private static ArrayList<Person> personList = new ArrayList<Person>();
 	private static ArrayList<SimpleContact> simpleContactList = new ArrayList<SimpleContact>();
@@ -74,48 +56,10 @@ public class ContactService extends Service {
         return START_STICKY;
     }
 	
-	public ArrayList<String> getNameNumber() {
-		if(isDataLoaded)
-			return nameNumber;
-		else 
-			return null;
-	}
-	public ArrayList<String> getNames() {
-		if(isDataLoaded) 
-			return names; 
-		else 
-			return null;
-	}
-	public ArrayList<Date> getDates() {
-		if(isDataLoaded)
-			return dates;
-		else 
-			return null;
-	}
-	public ArrayList<Integer> getType() {
-		if(isDataLoaded)
-			return type;
-		else 
-			return null;
-	}
-	public ArrayList<String> getContactPhotoList() {
-		if(isDataLoaded)
-			return contactPhotoList;
-		else 
-			return null;
-	}
-	public ArrayList<String> getContactIdList() {
-		if(isDataLoaded)
-			return contactIdList;
-		else 
-			return null;
-	}
-	
 	public ArrayList<CallHistory> getCallLogData(){
-		if(isDataLoaded)
-			return callHistoryList;
-		else 
-			return null;
+		if(!isDataLoaded)
+			populateCallLogData();
+		return callHistoryList;
 	}
 	
 	public void populateCallLogData(){
@@ -280,8 +224,6 @@ public class ContactService extends Service {
     	                  ,"Carmina"  
     	                  ,"Thurman"  };
     	
-    	contactNameList = new ArrayList<String>(Arrays.asList(list));
-    	Collections.sort(contactNameList);
     	//return contactNameList;
     	ArrayList<String> nameList = new ArrayList<String>();
     	for (SimpleContact c : simpleContactList) {
@@ -290,6 +232,10 @@ public class ContactService extends Service {
 		}
     	Collections.sort(nameList);
     	return nameList;
+    }
+    
+    public ArrayList<SimpleContact> getSimpleContactsList(){
+    	return simpleContactList;
     }
     
     public void getAllContactsNames(){
@@ -314,12 +260,14 @@ public class ContactService extends Service {
                simpleContactList.add(contact);
            }
         }
+        Collections.sort(simpleContactList);
     }
     
-    public void readContacts(){
+    public Person readContact(String contactId){
         ContentResolver cr = getContentResolver();
         Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI,
-               null, null, null, null);
+               null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID +" = ?",
+                new String[]{contactId},null);
 
         if (cur.getCount() > 0) {
            while (cur.moveToNext()) {
@@ -436,8 +384,9 @@ public class ContactService extends Service {
                        person.setPhoto(Uri.parse(image_uri));
                       }
                }
-               personList.add(person);
+               return person;
            }
       }
+		return null;
    }
 }

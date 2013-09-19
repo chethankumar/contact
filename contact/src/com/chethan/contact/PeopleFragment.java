@@ -2,12 +2,16 @@ package com.chethan.contact;
 
 import java.util.ArrayList;
 
+import com.chethan.objects.SimpleContact;
 import com.chethan.services.ContactService;
 import com.chethan.utils.Utils;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import android.R.integer;
+import android.annotation.TargetApi;
 import android.graphics.AvoidXfermode.Mode;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.AndroidCharacter;
@@ -37,7 +41,7 @@ import android.widget.TextView;
 public class PeopleFragment extends Fragment {
 
 	public static ContactService contactService;
-	private ArrayList<String> contactNameList = new ArrayList<String>();
+	private ArrayList<SimpleContact> contactList = new ArrayList<SimpleContact>();
 	private int contactListPosition = 0;
 	
 	private TextView contact_2;
@@ -48,7 +52,7 @@ public class PeopleFragment extends Fragment {
 	private TextView alphabetTextView;
 	
 	private ImageView callButton;
-	private ImageView msgButton;
+	private ImageView fullContactPhoto;
 	
 	public static final PeopleFragment newInstance(ContactService service)
 	 {
@@ -62,6 +66,7 @@ public class PeopleFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.people_all, container, false);
 		
+		
 		final View singleContact = (View)view.findViewById(R.id.single_contact);
 		android.widget.LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(Utils.getWidthForContact(getActivity()), android.widget.FrameLayout.LayoutParams.WRAP_CONTENT);
 		singleContact.setLayoutParams(params);
@@ -69,8 +74,14 @@ public class PeopleFragment extends Fragment {
 		android.widget.LinearLayout.LayoutParams alphabets_params = new LinearLayout.LayoutParams(Utils.getWidthForAlphabets(getActivity()), android.widget.FrameLayout.LayoutParams.MATCH_PARENT);
 		textView.setLayoutParams(alphabets_params);
 		
+		fullContactPhoto = (ImageView)view.findViewById(R.id.contactFullPhoto);
+		RelativeLayout.LayoutParams fullContactPhotoLayoutParam = new RelativeLayout.LayoutParams(Utils.getWidthForContact(getActivity()),Utils.getWidthForContact(getActivity()));
+		fullContactPhotoLayoutParam.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+		fullContactPhotoLayoutParam.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+		fullContactPhoto.setLayoutParams(fullContactPhotoLayoutParam);
+		fullContactPhoto.setAlpha(10);
+		
 		callButton = (ImageView)view.findViewById(R.id.singleContact_call);
-		msgButton = (ImageView)view.findViewById(R.id.singleContact_msg);
 		
 		contact_2 = (TextView)view.findViewById(R.id.SingleContactName_2);
 		contact_1 = (TextView)view.findViewById(R.id.SingleContactName_1);
@@ -93,7 +104,7 @@ public class PeopleFragment extends Fragment {
 			
 			@Override
 			public boolean onTouch(View arg0, MotionEvent arg1) {
-				float step = (Utils.getScreenHeight(getActivity())/contactNameList.size());
+				float step = (Utils.getScreenHeight(getActivity())/contactList.size());
 				switch (arg1.getAction()) {
 				case MotionEvent.ACTION_MOVE:
 //					if(arg1.getY()>(singleContact.getY()+singleContact.getHeight())){
@@ -138,13 +149,13 @@ public class PeopleFragment extends Fragment {
 			}
 		});
 		
-		callButton.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View arg0) {
-				Toast.makeText(getActivity(), "call clicked for "+contactNameList.get(contactListPosition), Toast.LENGTH_SHORT).show();
-			}
-		});
+//		callButton.setOnClickListener(new OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View arg0) {
+//				Toast.makeText(getActivity(), "call clicked for "+contactNameList.get(contactListPosition), Toast.LENGTH_SHORT).show();
+//			}
+//		});
 		
 //		msgButton.setOnClickListener(new OnClickListener() {
 //			
@@ -160,48 +171,51 @@ public class PeopleFragment extends Fragment {
 	
 	@Override
 	public void setUserVisibleHint(boolean isVisibleToUser) {
-	super.setUserVisibleHint(isVisibleToUser);
-
-	if (isVisibleToUser) {
-		contactNameList = contactService.getContactNameList();
-		scroll();
-	}
-	else {  
-		
-	}
+		super.setUserVisibleHint(isVisibleToUser);
+	
+		if (isVisibleToUser) {
+			contactList = contactService.getSimpleContactsList();
+			scroll();
+		}
+		else {  
+			
+		}
 
 	}
 	
 	private void scroll(){
 		
-		if(contactListPosition>=contactNameList.size())
-			contactListPosition=contactNameList.size()-1;
+		if(contactListPosition>=contactList.size())
+			contactListPosition=contactList.size()-1;
 		
 		if(contactListPosition<0)
 			contactListPosition=0;
 		int position = contactListPosition;
 	//	contactListPosition=position;
 		
-		if(position>2 && position<contactNameList.size()){
-			contact_2.setText(contactNameList.get(position-2));
+//		setContactFullPhotoPosition();	
+//		setFullContactPhoto();
+		
+		if(position>2 && position<contactList.size()){
+			contact_2.setText(contactList.get(position-2).getName());
 		}else{
 			contact_2.setText("");
 		}
-		if(position>1 && position<contactNameList.size()){
-			contact_1.setText(contactNameList.get(position-1));
+		if(position>1 && position<contactList.size()){
+			contact_1.setText(contactList.get(position-1).getName());
 		}else{
 			contact_1.setText("");
 		}
-		if(position>=0 && position<contactNameList.size()){
-			contact.setText(contactNameList.get(position));
+		if(position>=0 && position<contactList.size()){
+			contact.setText(contactList.get(position).getName());
 		}
-		if(position+1<contactNameList.size()){
-			contact1.setText(contactNameList.get(position+1));
+		if(position+1<contactList.size()){
+			contact1.setText(contactList.get(position+1).getName());
 		}else{
 			contact1.setText("");
 		}
-		if(position+2<contactNameList.size()){
-			contact2.setText(contactNameList.get(position+2));
+		if(position+2<contactList.size()){
+			contact2.setText(contactList.get(position+2).getName());
 		}else {
 			contact2.setText("");
 		}
@@ -209,14 +223,38 @@ public class PeopleFragment extends Fragment {
 		highlightAlphabets();
 	}
 	
+	private void setContactFullPhotoPosition(){
+		if(contactListPosition<(contactList.size()/2)){
+			RelativeLayout.LayoutParams fullContactPhotoLayoutParam = new RelativeLayout.LayoutParams(Utils.getWidthForContact(getActivity()),Utils.getWidthForContact(getActivity()));
+			fullContactPhotoLayoutParam.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+			fullContactPhotoLayoutParam.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+			fullContactPhoto.setLayoutParams(fullContactPhotoLayoutParam);
+		}else{
+			RelativeLayout.LayoutParams fullContactPhotoLayoutParam = new RelativeLayout.LayoutParams(Utils.getWidthForContact(getActivity()),Utils.getWidthForContact(getActivity()));
+			fullContactPhotoLayoutParam.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+			fullContactPhotoLayoutParam.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+			fullContactPhoto.setLayoutParams(fullContactPhotoLayoutParam);
+		}
+	}
+	
+	private void setFullContactPhoto(){
+		if(contactList.get(contactListPosition).getPhoto()!=null){
+			ImageLoader.getInstance().displayImage(contactList.get(contactListPosition).getPhoto().toString(), fullContactPhoto);
+		}else{
+			fullContactPhoto.setImageResource(R.drawable.me4);
+		}
+		fullContactPhoto.setAlpha(105);
+	}
+	
 	private void highlightAlphabets(){
-		String textToHighlight = contactNameList.get(contactListPosition).substring(0, 1);
-		Spannable WordtoSpan = new SpannableString("A\nB\nC\nD\nE\nF\nG\nH\nI\nJ\nK\nL\nM\nN\nO\nP\nQ\nR\nS\nT\nU\nV\nW\nX\nY\nZ");        
-		if(WordtoSpan.toString().indexOf(textToHighlight)!=-1){
-			WordtoSpan.setSpan(new ForegroundColorSpan(Color.parseColor("#1E29D8")), WordtoSpan.toString().indexOf(textToHighlight), WordtoSpan.toString().indexOf(textToHighlight)+1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-			WordtoSpan.setSpan(new android.text.style.BackgroundColorSpan(Color.parseColor("#CDCDEE")), WordtoSpan.toString().indexOf(textToHighlight), WordtoSpan.toString().indexOf(textToHighlight)+1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-			WordtoSpan.setSpan(new android.text.style.TypefaceSpan("serief"), WordtoSpan.toString().indexOf(textToHighlight), WordtoSpan.toString().indexOf(textToHighlight)+1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-			alphabetTextView.setText(WordtoSpan);
+		if(contactList.get(contactListPosition).getName()!=null){
+			String textToHighlight = contactList.get(contactListPosition).getName().substring(0, 1);
+			Spannable WordtoSpan = new SpannableString("A\nB\nC\nD\nE\nF\nG\nH\nI\nJ\nK\nL\nM\nN\nO\nP\nQ\nR\nS\nT\nU\nV\nW\nX\nY\nZ");        
+			if(WordtoSpan.toString().indexOf(textToHighlight)!=-1){
+				WordtoSpan.setSpan(new ForegroundColorSpan(Color.parseColor("#1E29D8")), WordtoSpan.toString().indexOf(textToHighlight), WordtoSpan.toString().indexOf(textToHighlight)+1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+				WordtoSpan.setSpan(new android.text.style.BackgroundColorSpan(Color.parseColor("#CDCDEE")), WordtoSpan.toString().indexOf(textToHighlight), WordtoSpan.toString().indexOf(textToHighlight)+1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+				alphabetTextView.setText(WordtoSpan);
+			}
 		}
 	}
 	

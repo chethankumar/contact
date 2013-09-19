@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <TextView 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:textColor="#82837E"
+        android:layout_weight="1"
+        android:paddingLeft="33dp"
+	    android:gravity="left"
+	    android:singleLine="true"
+        android:text="Chethan Kumar SN"
+        android:id="@+id/me_SingleContactName_2"/>
+    <TextView 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="17sp"
+        android:textColor="#515151"
+        android:layout_weight="1"
+        android:paddingLeft="33dp"
+	    android:gravity="left"
+	    android:singleLine="true"
+        android:text="Chethan Kumar SN"
+        android:id="@+id/me_SingleContactName_1"/>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:background="@drawable/style_tile"
+	    android:orientation="horizontal" >
+	    
+        <ImageView 
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:id="@+id/singleContact_msg"
+            android:src="@drawable/me3"/>
+        <TextView 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:layout_weight="1"
+        android:paddingLeft="4dp"
+	    android:gravity="left"
+	    android:textColor="#0A13DF"
+	    android:singleLine="true"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit ="marquee_forever"
+        android:scrollHorizontally="true"
+        android:text="Chethan Kumar SN"
+        android:id="@+id/me_SingleContactName"/>
+    
+        <ImageView 
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:id="@+id/singleContact_call"
+            android:src="@drawable/green"/>
+    </LinearLayout>
+    
+    <TextView 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="17sp"
+        android:textColor="#515151"
+        android:layout_weight="1"
+        android:paddingLeft="33dp"
+	    android:gravity="left"
+	    android:singleLine="true"
+        android:text="Chethan Kumar SN"
+        android:id="@+id/me_SingleContactName1"/>
+    <TextView 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:textColor="#82837E"
+        android:layout_weight="1"
+        android:paddingLeft="33dp"
+	    android:gravity="left"
+	    android:singleLine="true"
+        android:text="Chethan Kumar SN"
+        android:id="@+id/me_SingleContactName2"/>
+
+</LinearLayout>

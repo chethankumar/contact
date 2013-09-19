@@ -29,11 +29,32 @@ public class Utils {
 		return (size.x/3)-10;
 	}
 	
+	public static int getWidthForProfileBackground(Activity activity){
+		Display display = activity.getWindowManager().getDefaultDisplay();
+		Point size = new Point();
+		display.getSize(size);
+		return size.x;
+	}
+	
+	public static int getWidthForProfileCircle(Activity activity){
+		Display display = activity.getWindowManager().getDefaultDisplay();
+		Point size = new Point();
+		display.getSize(size);
+		return size.x/2;
+	}
+	
 	public static int getWidthForContact(Activity activity){
 		Display display = activity.getWindowManager().getDefaultDisplay();
 		Point size = new Point();
 		display.getSize(size);
 		return (size.x*8)/10;
+	}
+	
+	public static int getTopMarginForContact(Activity activity){
+		Display display = activity.getWindowManager().getDefaultDisplay();
+		Point size = new Point();
+		display.getSize(size);
+		return (size.y*8)/10;
 	}
 	
 	public static int getWidthForAlphabets(Activity activity){

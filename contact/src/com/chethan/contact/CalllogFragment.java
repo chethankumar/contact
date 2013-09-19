@@ -1,33 +1,26 @@
 package com.chethan.contact;
 
-import java.sql.Date;
 import java.util.ArrayList;
 
 import com.chethan.objects.CallHistory;
 import com.chethan.services.ContactService;
+import com.chethan.utils.CircularImageView;
+import com.chethan.utils.RoundedImageView;
 import com.chethan.utils.Utils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.PauseOnScrollListener;
 
-import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Messenger;
 import android.os.Vibrator;
 import android.provider.CallLog;
-import android.provider.ContactsContract;
-import android.provider.ContactsContract.PhoneLookup;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -44,6 +37,7 @@ public class CalllogFragment extends Fragment {
 	public static ContactService contactService;
 	private ArrayList<CallHistory> callHistories = new ArrayList<CallHistory>();
 	private Vibrator myVib;
+	private LinearLayout cardInCallLog;
 	public static final CalllogFragment newInstance(ContactService service)
 	 {
 		CalllogFragment f = new CalllogFragment();
@@ -120,7 +114,9 @@ public class CalllogFragment extends Fragment {
 					mygridView = (LinearLayout)inflater.inflate(R.layout.log_tile, container, false);
 					viewHolder = new ViewHolder();
 					mygridView.setLayoutParams(new AbsListView.LayoutParams(Utils.getWidthForCard(getActivity()),Utils.getHeightForCard(getActivity())));
-					viewHolder.photoImageView = (ImageView)mygridView.findViewById(R.id.log_photo);
+//					viewHolder.photoImageView = (ImageView)mygridView.findViewById(R.id.log_photo);
+//					viewHolder.photoImageView = (RoundedImageView)mygridView.findViewById(R.id.log_photo);
+					viewHolder.photoImageView = (CircularImageView)mygridView.findViewById(R.id.log_photo);
 					viewHolder.photoImageView.getLayoutParams().height=width-Utils.getPx(getActivity(), 15);
 					viewHolder.photoImageView.getLayoutParams().width=width-Utils.getPx(getActivity(), 15);
 					viewHolder.nameOrNumber = (TextView)mygridView.findViewById(R.id.log_nameOrNumber);
@@ -130,6 +126,7 @@ public class CalllogFragment extends Fragment {
 					viewHolder.logTime = (TextView)mygridView.findViewById(R.id.log_time);
 					viewHolder.logTime.setTypeface(Utils.getSegoeTypeface(getActivity()));
 					viewHolder.photoImageView.setImageResource(R.drawable.contact);
+					viewHolder.cardForLogTile = (LinearLayout)mygridView.findViewById(R.id.log_tile_card_background);
 					mygridView.setTag(viewHolder);
 				}else{
 					viewHolder=(ViewHolder)mygridView.getTag();
@@ -146,24 +143,32 @@ public class CalllogFragment extends Fragment {
 				viewHolder.nameOrNumber.setText(callHistories.get(position).getName()==null ? callHistories.get(position).getPhoneNumber() : callHistories.get(position).getName());
 				viewHolder.logDate.setText(Utils.getDate(callHistories.get(position).getDate()));
 				viewHolder.logTime.setText(Utils.getTime(callHistories.get(position).getDate()));
-						
+					
+				viewHolder.cardForLogTile.setBackgroundResource(R.drawable.whitetile);
+//				viewHolder.nameOrNumber.setTextColor(Color.WHITE);
+//				viewHolder.logDate.setTextColor(Color.WHITE);
+//				viewHolder.logTime.setTextColor(Color.WHITE);
+				
 						switch (callHistories.get(position).getType()) {
 						case CallLog.Calls.OUTGOING_TYPE:
 							viewHolder.nameOrNumber.setTextColor(Color.parseColor("#007304"));
 							viewHolder.logDate.setTextColor(Color.parseColor("#007304"));
 							viewHolder.logTime.setTextColor(Color.parseColor("#007304"));
+//							viewHolder.cardForLogTile.setBackgroundResource(R.drawable.greenbackground);
 							break;
 							
 						case CallLog.Calls.INCOMING_TYPE:
 							viewHolder.nameOrNumber.setTextColor(Color.parseColor("#0A13DF"));
 							viewHolder.logDate.setTextColor(Color.parseColor("#0A13DF"));
 							viewHolder.logTime.setTextColor(Color.parseColor("#0A13DF"));
+//							viewHolder.cardForLogTile.setBackgroundResource(R.drawable.bluebackground);
 							break;
 							
 						case CallLog.Calls.MISSED_TYPE:
 							viewHolder.nameOrNumber.setTextColor(Color.RED);
 							viewHolder.logDate.setTextColor(Color.RED);
 							viewHolder.logTime.setTextColor(Color.RED);
+//							viewHolder.cardForLogTile.setBackgroundResource(R.drawable.redbackground);
 							break;
 						}
 				
@@ -214,10 +219,13 @@ public class CalllogFragment extends Fragment {
 	}
 
 	static class ViewHolder{
-		 ImageView photoImageView;
+		 CircularImageView photoImageView;
+//		 RoundedImageView photoImageView;
+//		 ImageView photoImageView;
 		 TextView nameOrNumber;
 		 TextView logDate;
 		 TextView logTime;
+		 LinearLayout cardForLogTile;
 	 }
 }
 
