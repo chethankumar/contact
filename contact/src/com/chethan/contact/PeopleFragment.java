@@ -2,41 +2,27 @@ package com.chethan.contact;
 
 import java.util.ArrayList;
 
-import com.chethan.objects.SimpleContact;
-import com.chethan.services.ContactService;
-import com.chethan.utils.Utils;
-import com.nostra13.universalimageloader.core.ImageLoader;
-
-import android.R.integer;
-import android.annotation.TargetApi;
-import android.graphics.AvoidXfermode.Mode;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.AndroidCharacter;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
-import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnDragListener;
-import android.view.View.OnGenericMotionListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-import android.view.ViewGroup.MarginLayoutParams;
-import android.widget.AbsListView;
-import android.widget.AbsoluteLayout;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.chethan.objects.SimpleContact;
+import com.chethan.services.ContactService;
+import com.chethan.utils.RoundedImageView;
+import com.chethan.utils.Utils;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class PeopleFragment extends Fragment {
 
@@ -44,15 +30,20 @@ public class PeopleFragment extends Fragment {
 	private ArrayList<SimpleContact> contactList = new ArrayList<SimpleContact>();
 	private int contactListPosition = 0;
 	
+	private View ContactScroller;
+	
+	private TextView contact_3;
 	private TextView contact_2;
 	private TextView contact_1;
 	private TextView contact;
 	private TextView contact1;
 	private TextView contact2;
+	private TextView contact3;
 	private TextView alphabetTextView;
 	
 	private ImageView callButton;
 	private ImageView fullContactPhoto;
+	private RoundedImageView contactPhoto;
 	
 	public static final PeopleFragment newInstance(ContactService service)
 	 {
@@ -64,15 +55,15 @@ public class PeopleFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.people_all, container, false);
+		final View view = inflater.inflate(R.layout.people_all, container, false);
 		
-		
-		final View singleContact = (View)view.findViewById(R.id.single_contact);
+		//init all views
+		ContactScroller = (View)view.findViewById(R.id.single_contact);
 		android.widget.LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(Utils.getWidthForContact(getActivity()), android.widget.FrameLayout.LayoutParams.WRAP_CONTENT);
-		singleContact.setLayoutParams(params);
-		final TextView textView = (TextView)view.findViewById(R.id.alphabets);
+		ContactScroller.setLayoutParams(params);
+		alphabetTextView = (TextView)view.findViewById(R.id.alphabets);
 		android.widget.LinearLayout.LayoutParams alphabets_params = new LinearLayout.LayoutParams(Utils.getWidthForAlphabets(getActivity()), android.widget.FrameLayout.LayoutParams.MATCH_PARENT);
-		textView.setLayoutParams(alphabets_params);
+		alphabetTextView.setLayoutParams(alphabets_params);
 		
 		fullContactPhoto = (ImageView)view.findViewById(R.id.contactFullPhoto);
 		RelativeLayout.LayoutParams fullContactPhotoLayoutParam = new RelativeLayout.LayoutParams(Utils.getWidthForContact(getActivity()),Utils.getWidthForContact(getActivity()));
@@ -82,60 +73,71 @@ public class PeopleFragment extends Fragment {
 		fullContactPhoto.setAlpha(10);
 		
 		callButton = (ImageView)view.findViewById(R.id.singleContact_call);
+		contactPhoto = (RoundedImageView)view.findViewById(R.id.singleContact_photo);
 		
-		contact_2 = (TextView)view.findViewById(R.id.SingleContactName_2);
-		contact_1 = (TextView)view.findViewById(R.id.SingleContactName_1);
-		contact = (TextView)view.findViewById(R.id.SingleContactName);
-		contact1 = (TextView)view.findViewById(R.id.SingleContactName1);
-		contact2 = (TextView)view.findViewById(R.id.SingleContactName2);
-		alphabetTextView = (TextView)view.findViewById(R.id.alphabets);
+		contact_3 = (TextView)view.findViewById(R.id.ContactScroller_name_3);
+		contact_2 = (TextView)view.findViewById(R.id.ContactScroller_name_2);
+		contact_1 = (TextView)view.findViewById(R.id.ContactScroller_name_1);
+		contact = (TextView)view.findViewById(R.id.ContactScroller_name);
+		contact1 = (TextView)view.findViewById(R.id.ContactScroller_name1);
+		contact2 = (TextView)view.findViewById(R.id.ContactScroller_name2);
+		contact3 = (TextView)view.findViewById(R.id.ContactScroller_name3);
 		
 		alphabetTextView.setTypeface(Utils.getSegoeTypeface(getActivity()));
 		contact.setTypeface(Utils.getSegoeTypeface(getActivity()));
 		contact1.setTypeface(Utils.getSegoeTypeface(getActivity()));
 		contact2.setTypeface(Utils.getSegoeTypeface(getActivity()));
+		contact3.setTypeface(Utils.getSegoeTypeface(getActivity()));
 		contact_1.setTypeface(Utils.getSegoeTypeface(getActivity()));
 		contact_2.setTypeface(Utils.getSegoeTypeface(getActivity()));
+		contact_3.setTypeface(Utils.getSegoeTypeface(getActivity()));
 		
-//		contactNameList = contactService.getContactNameList();
-//		scroll();
+		//get the list of all contacts name and photo
+		contactList = contactService.getSimpleContactsList();
+		scroll();
 		
+		final int screenHeight = Utils.getScreenHeight(getActivity());
+		final int bottomStub = Utils.getPx(getActivity(), 50);
+		final int topStub = Utils.getPx(getActivity(), 40);
+		final float bigstep = (screenHeight-bottomStub-topStub)/15;
+		final int mid = (int) ((screenHeight-bottomStub-topStub)/2);
+		
+		//scrolling the contacts 
 		view.setOnTouchListener(new OnTouchListener() {
+			int before = 0;
+			int after = 0;
 			
 			@Override
 			public boolean onTouch(View arg0, MotionEvent arg1) {
-				float step = (Utils.getScreenHeight(getActivity())/contactList.size());
+				final float meY = arg1.getY();
 				switch (arg1.getAction()) {
 				case MotionEvent.ACTION_MOVE:
-//					if(arg1.getY()>(singleContact.getY()+singleContact.getHeight())){
-//						singleContact.setTranslationY(singleContact.getY()+step);
-//						contactListPosition++;
-//						scroll();
-//					}else if(arg1.getY()<(singleContact.getY())){
-//						singleContact.setTranslationY(singleContact.getY()-step);
-//						contactListPosition--;
-//						scroll();
-//					}
-//					else{
-//						singleContact.setTranslationY(arg1.getY()-singleContact.getHeight()/2);
-//						contactListPosition = (int)(arg1.getY()/step);
-//						scroll();
-//					}
-					if(arg1.getY()<(singleContact.getY()+singleContact.getHeight())
-							&& arg1.getY()>(singleContact.getY())){
-						singleContact.setTranslationY(arg1.getY()-singleContact.getHeight()/2);
-						contactListPosition = (int)(arg1.getY()/step);
+					if(meY<(ContactScroller.getY()+ContactScroller.getHeight())
+							&& meY>(ContactScroller.getY())){
+						if(meY > (screenHeight-bottomStub)) {
+							contactListPosition+=4;
+						}else if(meY < topStub) {
+							contactListPosition-=4;
+						}else if(meY < (screenHeight-bottomStub) && meY > topStub) {
+							ContactScroller.setTranslationY(meY-ContactScroller.getHeight()/2);
+							after=(int) ((meY-mid)/bigstep);
+							if (before!=after) {
+								contactListPosition = (int) (contactListPosition + after-before);
+								before=after;
+							}
+							
+						}
 						scroll();
 					}
 					break;
 
 				case MotionEvent.ACTION_DOWN:
-					if(arg1.getY()>(singleContact.getY()+singleContact.getHeight())){
-						singleContact.setTranslationY(singleContact.getY()+step);
+					if(meY>(ContactScroller.getY()+ContactScroller.getHeight())){
+						ContactScroller.setTranslationY(ContactScroller.getY()+bigstep);
 						contactListPosition++;
 						scroll();
-					}else if(arg1.getY()<(singleContact.getY())){
-						singleContact.setTranslationY(singleContact.getY()-step);
+					}else if(meY<(ContactScroller.getY())){
+						ContactScroller.setTranslationY(ContactScroller.getY()-bigstep);
 						contactListPosition--;
 						scroll();
 					}
@@ -149,21 +151,24 @@ public class PeopleFragment extends Fragment {
 			}
 		});
 		
-//		callButton.setOnClickListener(new OnClickListener() {
-//			
-//			@Override
-//			public void onClick(View arg0) {
-//				Toast.makeText(getActivity(), "call clicked for "+contactNameList.get(contactListPosition), Toast.LENGTH_SHORT).show();
-//			}
-//		});
+		//touch event for alphabets
 		
-//		msgButton.setOnClickListener(new OnClickListener() {
-//			
-//			@Override
-//			public void onClick(View arg0) {
-//				Toast.makeText(getActivity(), "msg clicked for "+contactNameList.get(contactListPosition), Toast.LENGTH_SHORT).show();
-//			}
-//		});
+		alphabetTextView.setOnTouchListener(new OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View arg0, MotionEvent arg1) {
+				switch (arg1.getAction()) {
+				case MotionEvent.ACTION_MOVE:
+					
+					break;
+				case MotionEvent.ACTION_DOWN:
+					
+					break;
+				default:break;
+				}
+				return true;
+			}
+		});
 		
 		return view;
 		
@@ -174,8 +179,9 @@ public class PeopleFragment extends Fragment {
 		super.setUserVisibleHint(isVisibleToUser);
 	
 		if (isVisibleToUser) {
-			contactList = contactService.getSimpleContactsList();
-			scroll();
+//			contactList = contactService.getSimpleContactsList();
+//			contactList = contactService.getDummyList();
+//			scroll();
 		}
 		else {  
 			
@@ -191,11 +197,12 @@ public class PeopleFragment extends Fragment {
 		if(contactListPosition<0)
 			contactListPosition=0;
 		int position = contactListPosition;
-	//	contactListPosition=position;
 		
-//		setContactFullPhotoPosition();	
-//		setFullContactPhoto();
-		
+		if(position>3 && position<contactList.size()){
+			contact_3.setText(contactList.get(position-3).getName());
+		}else{
+			contact_3.setText("");
+		}
 		if(position>2 && position<contactList.size()){
 			contact_2.setText(contactList.get(position-2).getName());
 		}else{
@@ -208,6 +215,11 @@ public class PeopleFragment extends Fragment {
 		}
 		if(position>=0 && position<contactList.size()){
 			contact.setText(contactList.get(position).getName());
+			if(contactList.get(position).getPhoto()!=null) {
+				ImageLoader.getInstance().displayImage(contactList.get(position).getPhoto().toString(), contactPhoto);
+			}else {
+				contactPhoto.setImageResource(R.drawable.me4);
+			}
 		}
 		if(position+1<contactList.size()){
 			contact1.setText(contactList.get(position+1).getName());
@@ -219,37 +231,19 @@ public class PeopleFragment extends Fragment {
 		}else {
 			contact2.setText("");
 		}
+		if(position+3<contactList.size()){
+			contact3.setText(contactList.get(position+3).getName());
+		}else {
+			contact3.setText("");
+		}
 		
 		highlightAlphabets();
-	}
-	
-	private void setContactFullPhotoPosition(){
-		if(contactListPosition<(contactList.size()/2)){
-			RelativeLayout.LayoutParams fullContactPhotoLayoutParam = new RelativeLayout.LayoutParams(Utils.getWidthForContact(getActivity()),Utils.getWidthForContact(getActivity()));
-			fullContactPhotoLayoutParam.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-			fullContactPhotoLayoutParam.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-			fullContactPhoto.setLayoutParams(fullContactPhotoLayoutParam);
-		}else{
-			RelativeLayout.LayoutParams fullContactPhotoLayoutParam = new RelativeLayout.LayoutParams(Utils.getWidthForContact(getActivity()),Utils.getWidthForContact(getActivity()));
-			fullContactPhotoLayoutParam.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-			fullContactPhotoLayoutParam.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-			fullContactPhoto.setLayoutParams(fullContactPhotoLayoutParam);
-		}
-	}
-	
-	private void setFullContactPhoto(){
-		if(contactList.get(contactListPosition).getPhoto()!=null){
-			ImageLoader.getInstance().displayImage(contactList.get(contactListPosition).getPhoto().toString(), fullContactPhoto);
-		}else{
-			fullContactPhoto.setImageResource(R.drawable.me4);
-		}
-		fullContactPhoto.setAlpha(105);
 	}
 	
 	private void highlightAlphabets(){
 		if(contactList.get(contactListPosition).getName()!=null){
 			String textToHighlight = contactList.get(contactListPosition).getName().substring(0, 1);
-			Spannable WordtoSpan = new SpannableString("A\nB\nC\nD\nE\nF\nG\nH\nI\nJ\nK\nL\nM\nN\nO\nP\nQ\nR\nS\nT\nU\nV\nW\nX\nY\nZ");        
+			Spannable WordtoSpan = new SpannableString("#\nA\nB\nC\nD\nE\nF\nG\nH\nI\nJ\nK\nL\nM\nN\nO\nP\nQ\nR\nS\nT\nU\nV\nW\nX\nY\nZ");        
 			if(WordtoSpan.toString().indexOf(textToHighlight)!=-1){
 				WordtoSpan.setSpan(new ForegroundColorSpan(Color.parseColor("#1E29D8")), WordtoSpan.toString().indexOf(textToHighlight), WordtoSpan.toString().indexOf(textToHighlight)+1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 				WordtoSpan.setSpan(new android.text.style.BackgroundColorSpan(Color.parseColor("#CDCDEE")), WordtoSpan.toString().indexOf(textToHighlight), WordtoSpan.toString().indexOf(textToHighlight)+1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);

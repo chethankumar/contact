@@ -1,14 +1,8 @@
 package com.chethan.contact;
 
 import java.util.ArrayList;
-
-import com.chethan.objects.CallHistory;
-import com.chethan.services.ContactService;
-import com.chethan.utils.CircularImageView;
-import com.chethan.utils.RoundedImageView;
-import com.chethan.utils.Utils;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.PauseOnScrollListener;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import android.content.Context;
 import android.content.Intent;
@@ -30,6 +24,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.TextView;
+
+import com.chethan.objects.CallHistory;
+import com.chethan.services.ContactService;
+import com.chethan.utils.Utils;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.PauseOnScrollListener;
 
 public class CalllogFragment extends Fragment {
 
@@ -53,14 +53,43 @@ public class CalllogFragment extends Fragment {
 	   	GridView gridView = (GridView)v.findViewById(R.id.gridView);
 	   	myVib = (Vibrator) getActivity().getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
 	   
-	   	contactService.populateCallLogData();
-	   	callHistories = contactService.getCallLogData();
+//	   	contactService.populateCallLogData();
+	   	
+	   	final Timer timer = new Timer();
+	   	timer.scheduleAtFixedRate(new TimerTask() {
+			
+			@Override
+			public void run() {
+				getActivity().runOnUiThread(new Runnable() {
+
+				    @Override
+				    public void run() {
+				    	if(contactService.getCallLogData() != null) {
+				    		callHistories = contactService.getCallLogData();
+				    		timer.cancel();
+				    	}
+				    }
+				     
+				});
+			}
+		}, 0, 2000);
+	   	
+//	   	callHistories = contactService.getCallLogData();
+	   	
 //------------------------------------
 	   	boolean pauseOnScroll = false; // or true
-	   	boolean pauseOnFling = false; // or false
+	   	boolean pauseOnFling = true; // or false
 	   	PauseOnScrollListener listener = new PauseOnScrollListener(ImageLoader.getInstance(), pauseOnScroll, pauseOnFling);
 	   	gridView.setOnScrollListener(listener);
 	   	
+	   	ImageView imgView = new ImageView(getActivity().getApplicationContext());
+	   	for (CallHistory element : callHistories) {
+	   		if(element.getPhoto()!=null)
+	   			ImageLoader.getInstance().displayImage(element.getPhoto().toString(), imgView);
+		}
+	   	gridView.setAlwaysDrawnWithCacheEnabled(true);
+	   	gridView.setDrawingCacheEnabled(true);
+	   	gridView.setScrollingCacheEnabled(true);
 	   	gridView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -108,17 +137,17 @@ public class CalllogFragment extends Fragment {
 			public View getView(int position, View mygridView, ViewGroup container) {
 				 
 				 ViewHolder viewHolder;  
+				 int width = Utils.getWidthForCard(getActivity());
 				
 				if(mygridView==null){
-					int width = Utils.getWidthForCard(getActivity());
 					mygridView = (LinearLayout)inflater.inflate(R.layout.log_tile, container, false);
 					viewHolder = new ViewHolder();
-					mygridView.setLayoutParams(new AbsListView.LayoutParams(Utils.getWidthForCard(getActivity()),Utils.getHeightForCard(getActivity())));
-//					viewHolder.photoImageView = (ImageView)mygridView.findViewById(R.id.log_photo);
+					mygridView.setLayoutParams(new AbsListView.LayoutParams(width,Utils.getHeightForCard(getActivity())));
+					viewHolder.photoImageView = (ImageView)mygridView.findViewById(R.id.log_photo);
 //					viewHolder.photoImageView = (RoundedImageView)mygridView.findViewById(R.id.log_photo);
-					viewHolder.photoImageView = (CircularImageView)mygridView.findViewById(R.id.log_photo);
-					viewHolder.photoImageView.getLayoutParams().height=width-Utils.getPx(getActivity(), 15);
-					viewHolder.photoImageView.getLayoutParams().width=width-Utils.getPx(getActivity(), 15);
+//					viewHolder.photoImageView = (CircularImageView)mygridView.findViewById(R.id.log_photo);
+					viewHolder.photoImageView.getLayoutParams().height=width;//-Utils.getPx(getActivity(), 15);
+					viewHolder.photoImageView.getLayoutParams().width=width;//-Utils.getPx(getActivity(), 15);
 					viewHolder.nameOrNumber = (TextView)mygridView.findViewById(R.id.log_nameOrNumber);
 					viewHolder.nameOrNumber.setTypeface(Utils.getSegoeTypeface(getActivity()));
 					viewHolder.logDate = (TextView)mygridView.findViewById(R.id.log_date);
@@ -132,43 +161,41 @@ public class CalllogFragment extends Fragment {
 					viewHolder=(ViewHolder)mygridView.getTag();
 				}
 
-				if (callHistories.get(position).getPhoto() != null) {
-					ImageLoader.getInstance().displayImage(callHistories.get(position).getPhoto().toString(), viewHolder.photoImageView);
-                } 
-				else {
-					//ImageLoader.getInstance().displayImage("drawable://" + R.drawable.contact, viewHolder.photoImageView);
-					viewHolder.photoImageView.setImageResource(R.drawable.contact);
-                }
-				
 				viewHolder.nameOrNumber.setText(callHistories.get(position).getName()==null ? callHistories.get(position).getPhoneNumber() : callHistories.get(position).getName());
 				viewHolder.logDate.setText(Utils.getDate(callHistories.get(position).getDate()));
 				viewHolder.logTime.setText(Utils.getTime(callHistories.get(position).getDate()));
 					
-				viewHolder.cardForLogTile.setBackgroundResource(R.drawable.whitetile);
-//				viewHolder.nameOrNumber.setTextColor(Color.WHITE);
-//				viewHolder.logDate.setTextColor(Color.WHITE);
-//				viewHolder.logTime.setTextColor(Color.WHITE);
+				if(callHistories.get(position).getPhoto() != null) {
+//					Picasso.with(getActivity()).load(callHistories.get(position).getPhoto()).into(viewHolder.photoImageView);
+					ImageLoader.getInstance().displayImage(callHistories.get(position).getPhoto().toString(), viewHolder.photoImageView);
+				}else {
+					viewHolder.photoImageView.setImageResource(R.drawable.me6);
+				}
+				
+				viewHolder.nameOrNumber.setTextColor(Color.WHITE);
+				viewHolder.logDate.setTextColor(Color.WHITE);
+				viewHolder.logTime.setTextColor(Color.WHITE);
 				
 						switch (callHistories.get(position).getType()) {
 						case CallLog.Calls.OUTGOING_TYPE:
-							viewHolder.nameOrNumber.setTextColor(Color.parseColor("#007304"));
-							viewHolder.logDate.setTextColor(Color.parseColor("#007304"));
-							viewHolder.logTime.setTextColor(Color.parseColor("#007304"));
-//							viewHolder.cardForLogTile.setBackgroundResource(R.drawable.greenbackground);
+//							viewHolder.nameOrNumber.setTextColor(Color.parseColor("#007304"));
+//							viewHolder.logDate.setTextColor(Color.parseColor("#007304"));
+//							viewHolder.logTime.setTextColor(Color.parseColor("#007304"));
+							viewHolder.cardForLogTile.setBackgroundResource(R.drawable.style_tile_green);
 							break;
 							
 						case CallLog.Calls.INCOMING_TYPE:
-							viewHolder.nameOrNumber.setTextColor(Color.parseColor("#0A13DF"));
-							viewHolder.logDate.setTextColor(Color.parseColor("#0A13DF"));
-							viewHolder.logTime.setTextColor(Color.parseColor("#0A13DF"));
-//							viewHolder.cardForLogTile.setBackgroundResource(R.drawable.bluebackground);
+//							viewHolder.nameOrNumber.setTextColor(Color.parseColor("#0A13DF"));
+//							viewHolder.logDate.setTextColor(Color.parseColor("#0A13DF"));
+//							viewHolder.logTime.setTextColor(Color.parseColor("#0A13DF"));
+							viewHolder.cardForLogTile.setBackgroundResource(R.drawable.style_tile_blue);
 							break;
 							
 						case CallLog.Calls.MISSED_TYPE:
-							viewHolder.nameOrNumber.setTextColor(Color.RED);
-							viewHolder.logDate.setTextColor(Color.RED);
-							viewHolder.logTime.setTextColor(Color.RED);
-//							viewHolder.cardForLogTile.setBackgroundResource(R.drawable.redbackground);
+//							viewHolder.nameOrNumber.setTextColor(Color.RED);
+//							viewHolder.logDate.setTextColor(Color.RED);
+//							viewHolder.logTime.setTextColor(Color.RED);
+							viewHolder.cardForLogTile.setBackgroundResource(R.drawable.style_tile_red);
 							break;
 						}
 				
@@ -209,19 +236,23 @@ public class CalllogFragment extends Fragment {
 				return true;
 			}
 		});
+	   	
 	   return v;
 	 }
 	 
 	 @Override
 	public void onResume() {
 		super.onResume();
-		callHistories = contactService.getCallLogData();
+		if(contactService.getCallLogData() != null) {
+    		callHistories = contactService.getCallLogData();
+    	}
+//		callHistories = contactService.getCallLogData();
 	}
 
 	static class ViewHolder{
-		 CircularImageView photoImageView;
+//		 CircularImageView photoImageView;
 //		 RoundedImageView photoImageView;
-//		 ImageView photoImageView;
+		 ImageView photoImageView;
 		 TextView nameOrNumber;
 		 TextView logDate;
 		 TextView logTime;

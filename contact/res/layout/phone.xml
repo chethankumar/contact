@@ -1,172 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/style_main_background_card" >
 
-    <LinearLayout android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_alignParentBottom="true"
-        android:id="@+id/lastrow">
-        
-         <TextView
-        android:id="@+id/phone_star"
+    <!-- search results and new contact -->
+    <GridView 
+		android:id="@+id/SearchgridView"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_height="200dp"
+        android:stretchMode="columnWidth"
         android:gravity="center_horizontal"
-        android:textSize="45sp"
-        android:textColor="#515151"
-        android:text="*" />
-
-    <TextView
-        android:id="@+id/phone_0"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-		android:layout_weight="1"
-        android:gravity="center_horizontal"
-        android:textSize="45sp"
-        android:textColor="#515151"
-        android:text="0" />
-
-    <TextView
-        android:id="@+id/phone_hash"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-		android:layout_weight="1"
-        android:gravity="center_horizontal"
-        android:textSize="45sp"
-        android:textColor="#515151"
-        android:text="#" />
-    </LinearLayout>
-   
-
-    <LinearLayout android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_above="@+id/lastrow"
-        android:id="@+id/row7">
-        
-        <TextView
-        android:id="@+id/phone_7"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-		android:layout_weight="1"
-        android:gravity="center_horizontal"
-        android:textSize="45sp"
-        android:textColor="#515151"
-        android:text="7" />
-
-    <TextView
-        android:id="@+id/phone_8"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-		android:layout_weight="1"
-        android:gravity="center_horizontal"
-        android:textSize="45sp"
-        android:textColor="#515151"
-        android:text="8" />
-
-    <TextView
-        android:id="@+id/phone_9"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-		android:layout_weight="1"
-        android:gravity="center_horizontal"
-        android:textSize="45sp"
-        android:textColor="#515151"
-        android:text="9" />
-    </LinearLayout>
+        android:horizontalSpacing="4dp"
+       	android:verticalSpacing="8dp"
+       	android:layout_weight="1"
+        android:numColumns="3" />
     
-	<LinearLayout android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_above="@+id/row7"
-        android:id="@+id/row4">
-	    
-	    <TextView
-        android:id="@+id/phone_4"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-		android:layout_weight="1"
-        android:gravity="center_horizontal"
-        android:textSize="45sp"
-        android:textColor="#515151"
-        android:text="4" />
-
-    <TextView
-        android:id="@+id/phone_5"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-		android:layout_weight="1"
-        android:gravity="center_horizontal"
-        android:textSize="45sp"
-        android:textColor="#515151"
-        android:text="5" />
-
-    <TextView
-        android:id="@+id/phone_6"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-		android:layout_weight="1"
-        android:gravity="center_horizontal"
-        android:textSize="45sp"
-        android:textColor="#515151"
-        android:text="6" />
-	    
-	</LinearLayout>
-    
-	<LinearLayout android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_above="@+id/row4"
-        android:id="@+id/row1">
-	    
-	    <TextView
-        android:id="@+id/phone_1"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-		android:layout_weight="1"
-        android:gravity="center_horizontal"
-        android:textSize="45sp" 
-        android:textColor="#515151"       
-        android:text="1" />
-
-    <TextView
-        android:id="@+id/phone_2"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-		android:layout_weight="1"
-        android:gravity="center_horizontal"
-        android:textSize="45sp"  
-        android:textColor="#515151"
-        android:text="2" />
-
-    <TextView
-        android:id="@+id/phone_3"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-		android:layout_weight="1"
-        android:gravity="center_horizontal"
-        android:textSize="45sp"  
-        android:textColor="#515151"
-        android:text="3" />
-	</LinearLayout>
- 
-	<!-- add contact and call number -->
-	<View
+    <!-- call number -->
+	 <View
     android:layout_width="fill_parent"
     android:layout_height="2dp"
     android:background="#8FBE00"
     android:layout_gravity="center"
-    android:layout_weight="1"
-    android:layout_above="@+id/row1"
-    android:id="@+id/separator"/>
+    android:id="@+id/separator"/> 
 	
     <LinearLayout android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:layout_above="@+id/separator"
         android:id="@+id/rowCall">
         
         <TextView
@@ -200,11 +61,162 @@
         
     </LinearLayout>
     
-    <!-- <View
-    android:layout_width="fill_parent"
-    android:layout_height="2dp"
-    android:background="#8FBE00"
-    android:layout_above="@+id/rowCall"
-    android:id="@+id/separator2"/> -->
+    <!-- dialpad (should change to grid view. this is ugly)-->
+    <LinearLayout android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:id="@+id/row1">
+	    
+	    <TextView
+        android:id="@+id/phone_1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+		android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:textSize="45sp" 
+        android:textColor="#515151"   
+        android:background="@drawable/blank"    
+        android:text="1" />
 
-</RelativeLayout>
+    <TextView
+        android:id="@+id/phone_2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+		android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:textSize="45sp"  
+        android:textColor="#515151"
+        android:background="@drawable/abc"
+        android:text="2" />
+
+    <TextView
+        android:id="@+id/phone_3"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+		android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:textSize="45sp"  
+        android:textColor="#515151"
+        android:background="@drawable/def"
+        android:text="3" />
+	</LinearLayout>
+    
+   <LinearLayout android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:id="@+id/row4">
+	    
+	    <TextView
+        android:id="@+id/phone_4"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+		android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:textSize="45sp"
+        android:textColor="#515151"
+        android:background="@drawable/ghi"
+        android:text="4" />
+
+    <TextView
+        android:id="@+id/phone_5"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+		android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:textSize="45sp"
+        android:textColor="#515151"
+        android:background="@drawable/jkl"
+        android:text="5" />
+
+    <TextView
+        android:id="@+id/phone_6"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+		android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:textSize="45sp"
+        android:textColor="#515151"
+        android:background="@drawable/mno"
+        android:text="6" />
+	    
+	</LinearLayout>
+
+    <LinearLayout android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:id="@+id/row7">
+        
+        <TextView
+        android:id="@+id/phone_7"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+		android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:textSize="45sp"
+        android:textColor="#515151"
+        android:background="@drawable/pqrs"
+        android:text="7" />
+
+    <TextView
+        android:id="@+id/phone_8"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+		android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:textSize="45sp"
+        android:textColor="#515151"
+        android:background="@drawable/tuv"
+        android:text="8" />
+
+    <TextView
+        android:id="@+id/phone_9"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+		android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:textSize="45sp"
+        android:textColor="#515151"
+        android:background="@drawable/wxyz"
+        android:text="9" />
+    </LinearLayout>
+    
+	<LinearLayout android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:id="@+id/lastrow">
+        
+         <TextView
+        android:id="@+id/phone_star"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:textSize="45sp"
+        android:textColor="#515151"
+        android:background="@drawable/blank"
+        android:text="*" />
+
+    <TextView
+        android:id="@+id/phone_0"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+		android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:textSize="45sp"
+        android:textColor="#515151"
+        android:background="@drawable/plus2"
+        android:text="0" />
+
+    <TextView
+        android:id="@+id/phone_hash"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+		android:layout_weight="1"
+        android:gravity="center_horizontal"
+        android:textSize="45sp"
+        android:textColor="#515151"
+        android:background="@drawable/blank"
+        android:text="#" />
+    </LinearLayout>
+    
+</LinearLayout>

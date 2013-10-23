@@ -10,11 +10,11 @@
     <item
         android:bottom="2dp">
         <shape android:shape="rectangle" >
-            <padding
+           <!--  <padding
                 android:bottom="5dp"
                 android:left="5dp"
                 android:right="5dp"
-                android:top="5dp" />
+                android:top="5dp" /> -->
 
             <solid android:color="#FFFFFF" />
             <corners android:radius="3dp"/>

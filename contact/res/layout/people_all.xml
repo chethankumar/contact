@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
 	android:layout_height="match_parent"
+	android:background="@drawable/style_main_background_card"
 	android:id="@+id/parentview">
 	
     <ImageView
@@ -19,11 +20,12 @@
 	    
 	    <TextView android:layout_width="wrap_content"
 	        android:layout_height="fill_parent"
-	        android:gravity="center_horizontal"
+	        android:gravity="center"
 	        android:paddingLeft="2dp"
 	        android:paddingRight="2dp"
-	        android:textSize="16sp"
+	        android:textSize="14sp"
 	        android:textColor="#82837E"
+	        android:background="@drawable/style_tile_alphabets"
 	        android:id="@+id/alphabets"
 	        android:text="A\nB\nC\nD\nE\nF\nG\nH\nI\nJ\nK\nL\nM\nN\nO\nP\nQ\nR\nS\nT\nU\nV\nW\nX\nY\nZ"/>
 	    

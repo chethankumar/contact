@@ -1,13 +1,10 @@
 package com.chethan.utils;
 
-import android.R.integer;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
@@ -16,12 +13,10 @@ import android.widget.ImageView;
 
 public class RoundedImageView extends ImageView {
 
-	private int borderWidth = 7;
 	private int viewWidth;
 	private int viewHeight;
 	private Bitmap image;
 	private Paint paint;
-	private Paint paintBorder;
 	private BitmapShader shader;
 	private int width;
 	private int height;
@@ -45,27 +40,7 @@ public class RoundedImageView extends ImageView {
 		// init paint
 		paint = new Paint();
 		paint.setAntiAlias(true);
-		
-		this.borderWidth = 10*width/100;
-		paintBorder = new Paint();
-		setBorderColor(Color.parseColor("#82837E"));
-		paintBorder.setAntiAlias(true);
-		paintBorder.setShadowLayer(7, 0, 0, Color.parseColor("#373030"));
-//		paintBorder.setShader(new LinearGradient(0, 0, 0, getHeight(), Color.BLACK, Color.WHITE, Shader.TileMode.MIRROR));
 		paint.setFilterBitmap(true);
-		paintBorder.setFilterBitmap(true);
-	}
-
-	public void setBorderWidth(int borderWidth) {
-		this.borderWidth = borderWidth*width/100;
-		this.invalidate();
-	}
-
-	public void setBorderColor(int borderColor) {
-		if (paintBorder != null)
-			paintBorder.setColor(borderColor);
-
-		this.invalidate();
 	}
 
 	private void loadBitmap() {
@@ -91,8 +66,7 @@ public class RoundedImageView extends ImageView {
 			// circleCenter is the x or y of the view's center
 			// radius is the radius in pixels of the cirle to be drawn
 			// paint contains the shader that will texture the shape
-			canvas.drawCircle(circleCenter + borderWidth, circleCenter + borderWidth, circleCenter + borderWidth, paintBorder);
-			canvas.drawCircle(circleCenter + borderWidth, circleCenter + borderWidth, circleCenter, paint);
+			canvas.drawCircle(circleCenter , circleCenter , circleCenter, paint);
 		}
 	}
 
@@ -101,8 +75,8 @@ public class RoundedImageView extends ImageView {
 		width = measureWidth(widthMeasureSpec);
 		height = measureHeight(heightMeasureSpec, widthMeasureSpec);
 
-		viewWidth = width - borderWidth-25;
-		viewHeight = height - borderWidth-25;
+		viewWidth = width ;
+		viewHeight = height ;
 
 		setMeasuredDimension(width, height);
 	}

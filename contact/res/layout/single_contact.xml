@@ -7,6 +7,17 @@
     <TextView 
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:textSize="10sp"
+        android:textColor="#82837E"
+        android:layout_weight="1"
+        android:paddingLeft="33dp"
+	    android:gravity="left"
+	    android:singleLine="true"
+        android:text="Chethan Kumar SN"
+        android:id="@+id/ContactScroller_name_3"/>
+    <TextView 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:textSize="12sp"
         android:textColor="#82837E"
         android:layout_weight="1"
@@ -14,7 +25,7 @@
 	    android:gravity="left"
 	    android:singleLine="true"
         android:text="Chethan Kumar SN"
-        android:id="@+id/SingleContactName_2"/>
+        android:id="@+id/ContactScroller_name_2"/>
     <TextView 
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -25,7 +36,7 @@
 	    android:gravity="left"
 	    android:singleLine="true"
         android:text="Chethan Kumar SN"
-        android:id="@+id/SingleContactName_1"/>
+        android:id="@+id/ContactScroller_name_1"/>
     
     <LinearLayout
         android:layout_width="match_parent"
@@ -33,11 +44,13 @@
 	    android:background="@drawable/style_tile"
 	    android:orientation="horizontal" >
 	    
-        <ImageView 
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:id="@+id/singleContact_msg"
+        <com.chethan.utils.RoundedImageView 
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:scaleType="fitCenter"
+            android:id="@+id/singleContact_photo"
             android:src="@drawable/me3"/>
+        
         <TextView 
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -51,13 +64,13 @@
         android:marqueeRepeatLimit ="marquee_forever"
         android:scrollHorizontally="true"
         android:text="Chethan Kumar SN"
-        android:id="@+id/SingleContactName"/>
+        android:id="@+id/ContactScroller_name"/>
     
         <ImageView 
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:id="@+id/singleContact_call"
-            android:src="@drawable/green"/>
+            android:src="@drawable/green"/> 
     </LinearLayout>
     
     <TextView 
@@ -70,7 +83,7 @@
 	    android:gravity="left"
 	    android:singleLine="true"
         android:text="Chethan Kumar SN"
-        android:id="@+id/SingleContactName1"/>
+        android:id="@+id/ContactScroller_name1"/>
     <TextView 
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -81,6 +94,17 @@
 	    android:gravity="left"
 	    android:singleLine="true"
         android:text="Chethan Kumar SN"
-        android:id="@+id/SingleContactName2"/>
+        android:id="@+id/ContactScroller_name2"/>
+    <TextView 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:textSize="10sp"
+        android:textColor="#82837E"
+        android:layout_weight="1"
+        android:paddingLeft="33dp"
+	    android:gravity="left"
+	    android:singleLine="true"
+        android:text="Chethan Kumar SN"
+        android:id="@+id/ContactScroller_name3"/>
 
 </LinearLayout>

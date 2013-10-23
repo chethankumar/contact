@@ -2,18 +2,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/whitetile"
+    android:background="@drawable/style_tile"
     android:orientation="vertical"
     android:id="@+id/log_tile_card_background" >
 
-        <com.chethan.utils.CircularImageView
+        <!-- <com.chethan.utils.CircularImageView
             android:id="@+id/log_photo"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
 	        android:scaleType="fitCenter"
 	        android:layout_gravity="center"
 	        android:layout_marginTop="9dp"
-	        android:src="@drawable/contact"/>
+	        android:src="@drawable/contact"/> -->
         
        <!--  <com.chethan.utils.RoundedImageView
             android:id="@+id/log_photo"
@@ -24,14 +24,13 @@
 	        android:layout_margin="2dp"
 	        android:src="@drawable/contact" /> -->
         
-	    <!-- <ImageView
+	      <ImageView
 	        android:id="@+id/log_photo"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
 	        android:scaleType="fitCenter"
 	        android:layout_gravity="center_horizontal"
-	        android:layout_margin="2dp"
-	        android:src="@drawable/contact" /> -->
+	        android:src="@drawable/me6" />  
 	
 	    <TextView
 	        android:id="@+id/log_nameOrNumber"
@@ -49,8 +48,8 @@
 	    <LinearLayout
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"
-	        android:layout_marginLeft="8dp"
-	        android:layout_marginRight="8dp"
+	        android:layout_marginLeft="2dp"
+	        android:layout_marginRight="2dp"
 	        android:orientation="horizontal" >
 	
 	        <TextView

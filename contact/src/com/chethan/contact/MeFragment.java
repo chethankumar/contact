@@ -1,79 +1,120 @@
 package com.chethan.contact;
 
-import java.util.ArrayList;
-
-import com.chethan.objects.SimpleContact;
-import com.chethan.services.ContactService;
-import com.chethan.utils.RoundedImageView;
-import com.chethan.utils.Utils;
-import com.nostra13.universalimageloader.core.ImageLoader;
-
-import android.R.integer;
-import android.annotation.TargetApi;
-import android.graphics.AvoidXfermode.Mode;
-import android.graphics.Color;
-import android.graphics.ColorFilter;
-import android.os.Build;
+import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
-import android.text.AndroidCharacter;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
-import android.view.DragEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnDragListener;
-import android.view.View.OnGenericMotionListener;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-import android.view.ViewGroup.MarginLayoutParams;
-import android.widget.AbsListView;
-import android.widget.AbsoluteLayout;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.Toast;
-import android.widget.LinearLayout.LayoutParams;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.chethan.contact.AccountUtils.UserProfile;
+import com.chethan.services.ContactService;
+import com.chethan.utils.RoundedImageView;
+import com.chethan.utils.ThemeUtil;
+import com.chethan.utils.Utils;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class MeFragment extends Fragment {
 
 	public static ContactService contactService;
-	
-	public static final MeFragment newInstance(ContactService service)
-	 {
+
+	private TextView name;
+	private TextView tagline;
+
+	ImageView profile_background;
+	ImageView profile_foreground;
+	RoundedImageView profilePicture;
+	ImageView editProfile;
+
+	String meid;
+
+	public static final MeFragment newInstance(ContactService service) {
 		MeFragment f = new MeFragment();
-	   contactService=service;
-	   return f;
-	 }
+		contactService = service;
+		return f;
+	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.me, container, false);
-		
-		ImageView profile_background = (ImageView)view.findViewById(R.id.me_profile_background);
+
+		name = (TextView) view.findViewById(R.id.me_profile_name);
+		tagline = (TextView) view.findViewById(R.id.me_profile_tagline);
+
+		profile_background = (ImageView) view.findViewById(R.id.me_profile_background);
 		profile_background.getLayoutParams().width = Utils.getWidthForProfileBackground(getActivity());
 		profile_background.getLayoutParams().height = Utils.getWidthForProfileBackground(getActivity());
-		profile_background.setAlpha(110);
-		
-		ImageView profile_foreground = (ImageView)view.findViewById(R.id.me_profile_foreground);
+		// profile_background.setAlpha(110);
+
+		profile_foreground = (ImageView) view.findViewById(R.id.me_profile_foreground);
 		profile_foreground.getLayoutParams().width = Utils.getWidthForProfileBackground(getActivity());
 		profile_foreground.getLayoutParams().height = Utils.getWidthForProfileBackground(getActivity());
-		profile_foreground.setAlpha(11);
-		
-		RoundedImageView profilePicture = (RoundedImageView)view.findViewById(R.id.me_profile_circle);
-		RelativeLayout.LayoutParams relativeLayout = new RelativeLayout.LayoutParams(Utils.getWidthForProfileCircle(getActivity()), Utils.getWidthForProfileCircle(getActivity()));
-		relativeLayout.leftMargin = (Utils.getWidthForProfileBackground(getActivity())-Utils.getWidthForProfileCircle(getActivity()))/2;
-		relativeLayout.topMargin = (Utils.getWidthForProfileBackground(getActivity())-Utils.getWidthForProfileCircle(getActivity()))*2/10;
+		// profile_foreground.setAlpha(11);
+
+		profilePicture = (RoundedImageView) view.findViewById(R.id.me_profile_circle);
+		RelativeLayout.LayoutParams relativeLayout = new RelativeLayout.LayoutParams(Utils.getWidthForProfileCircle(getActivity()),
+				Utils.getWidthForProfileCircle(getActivity()));
+		relativeLayout.leftMargin = (Utils.getWidthForProfileBackground(getActivity()) - Utils.getWidthForProfileCircle(getActivity())) / 2;
+		relativeLayout.topMargin = (Utils.getWidthForProfileBackground(getActivity()) - Utils.getWidthForProfileCircle(getActivity())) * 2 / 10;
 		profilePicture.setLayoutParams(relativeLayout);
-		profilePicture.setBorderColor(Color.WHITE);
+		// profilePicture.setBorderColor(Color.WHITE);
+
+		name.setTypeface(Utils.getLightTypeface(getActivity()));
+		tagline.setTypeface(Utils.getLightTypeface(getActivity()));
+
+		profile_background.setImageResource(ThemeUtil.meProfilePicture);
+		profile_foreground.setImageResource(ThemeUtil.meProfilePictureForeground);
+
+		editProfile = (ImageView) view.findViewById(R.id.me_profile_edit);
+
+		populateExistingMeDetails();
+
+		editProfile.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				startActivity(new Intent(Intent.ACTION_VIEW).setData(ContactsContract.Profile.CONTENT_URI));
+
+			}
+		});
 		return view;
-		
+
 	}
-	
+
+	private void populateExistingMeDetails() {
+		Cursor c = getActivity().getContentResolver().query((ContactsContract.Profile.CONTENT_URI), null, null, null, null);
+		int count = c.getCount();
+		String[] columnNames = c.getColumnNames();
+		boolean b = c.moveToFirst();
+		int position = c.getPosition();
+		if (count == 1 && position == 0) {
+			meid = c.getString(c.getColumnIndex(ContactsContract.Profile._ID));
+
+			String displayName = c.getString(c.getColumnIndex(ContactsContract.Profile.DISPLAY_NAME));
+			if (displayName != null && !displayName.contains("gmail.com")) {
+				name.setText(displayName);
+			} else {
+				name.setText("your Good name please");
+			}
+
+			String phoUri = c.getString(c.getColumnIndex(ContactsContract.Profile.PHOTO_URI));
+			if (phoUri != null) {
+				ImageLoader.getInstance().displayImage(phoUri, profile_background);
+				ImageLoader.getInstance().displayImage(phoUri, profilePicture);
+			}
+
+			// if (c.getString(c.getColumnIndex(ContactsContract.CommonDataKinds.Note.NOTE)) != null) {
+			// tagline.setText((c.getString(c.getColumnIndex(ContactsContract.CommonDataKinds.Note.NOTE))));
+			// }
+
+			UserProfile profile = AccountUtils.getUserProfile(getActivity());
+			System.out.println("test");
+		}
+	}
 }

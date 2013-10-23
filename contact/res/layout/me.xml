@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
 	android:layout_height="match_parent"
+	android:background="@drawable/style_main_background_card"
 	android:id="@+id/me_parentview">
 	
    <ImageView
@@ -22,15 +23,25 @@
         android:layout_height="wrap_content"
         android:id="@+id/me_profile_circle" 
         android:src="@drawable/me"
-        android:scaleType="centerInside"
-        android:layout_alignParentLeft="true"
+        android:scaleType="fitCenter"
+        android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true" />
+    
+    <ImageView 
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/me_profile_edit"
+        android:src="@drawable/editme"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"/>
     
     <TextView 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="17dp"
-        android:textSize="25sp"
+        android:layout_marginTop="36dp"
+        android:textSize="30sp"
         android:id="@+id/me_profile_name"
         android:layout_below="@id/me_profile_circle"
         android:textColor="@android:color/white"

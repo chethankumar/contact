@@ -5,11 +5,14 @@ import java.text.SimpleDateFormat;
 
 import com.chethan.contact.R;
 
+import android.R.integer;
 import android.app.Activity;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Typeface;
 import android.provider.CallLog;
+import android.util.TypedValue;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,58 +24,69 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class Utils {
-
-	public static int getWidthForCard(Activity activity){
-		Display display = activity.getWindowManager().getDefaultDisplay();
-		Point size = new Point();
-		display.getSize(size);
-		return (size.x/3)-10;
-	}
 	
-	public static int getWidthForProfileBackground(Activity activity){
-		Display display = activity.getWindowManager().getDefaultDisplay();
-		Point size = new Point();
-		display.getSize(size);
+	private static Point size = null;
+	
+	private static int getSizeX(Activity activity) {
+		if(size==null) {
+			Display display = activity.getWindowManager().getDefaultDisplay();
+			Point size = new Point();
+			display.getSize(size);
+			Utils.size = size;
+		}
 		return size.x;
 	}
 	
-	public static int getWidthForProfileCircle(Activity activity){
+	private static int getSizeY(Activity activity) {
+		if(size==null) {
+			Display display = activity.getWindowManager().getDefaultDisplay();
+			Point size = new Point();
+			display.getSize(size);
+			Utils.size = size;
+		}
+		return size.y;
+	}
+
+	public static int getWidthForCard(Activity activity){
+		JazzyViewPager viewPager = (JazzyViewPager)activity.findViewById(R.id.viewpager);
+		int width = viewPager.getLayoutParams().width;
 		Display display = activity.getWindowManager().getDefaultDisplay();
 		Point size = new Point();
 		display.getSize(size);
-		return size.x/2;
+//		return (int) ((size.x/3.5)-10);
+		return (int) ((getSizeX(activity)/3.5)-10);
+	}
+	
+	public static int getWidthForProfileBackground(Activity activity){
+		return getSizeX(activity)-getPx(activity, 10);
+	}
+	
+	public static int getWidthForProfileCircle(Activity activity){
+		return (int) (getSizeX(activity)*1.3/3);
 	}
 	
 	public static int getWidthForContact(Activity activity){
-		Display display = activity.getWindowManager().getDefaultDisplay();
-		Point size = new Point();
-		display.getSize(size);
-		return (size.x*8)/10;
+		return (getSizeX(activity)*8)/10;
+	}
+	
+	public static int getWidthForSingleContact(Activity activity){
+		return (getSizeX(activity)*3)/10;
 	}
 	
 	public static int getTopMarginForContact(Activity activity){
-		Display display = activity.getWindowManager().getDefaultDisplay();
-		Point size = new Point();
-		display.getSize(size);
-		return (size.y*8)/10;
+		return (getSizeY(activity)*8)/10;
 	}
 	
 	public static int getWidthForAlphabets(Activity activity){
-		Display display = activity.getWindowManager().getDefaultDisplay();
-		Point size = new Point();
-		display.getSize(size);
-		return (size.x*2)/10;
+		return (int) ((getSizeX(activity)*1.4)/10);
 	}
 	
 	public static int getScreenHeight(Activity activity){
-		Display display = activity.getWindowManager().getDefaultDisplay();
-		Point size = new Point();
-		display.getSize(size);
-		return size.y - getPx(activity, 75);
+		return getSizeY(activity) - getPx(activity, 75);
 	}
 	
 	public static int getHeightForCard(Activity activity) {
-		return getWidthForCard(activity)*4/3;
+		return (int) (getWidthForCard(activity)*4/2.8);
 	}
 	
 	public static Typeface getTitleTypeface(Activity activity) {
@@ -181,4 +195,8 @@ public class Utils {
 		return sdf.format(date);
 	}
 	
+	public static int dpToPx(Resources res, int dp) {
+		return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, res.getDisplayMetrics());
+	}
+
 }
