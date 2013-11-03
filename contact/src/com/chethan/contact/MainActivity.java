@@ -21,7 +21,6 @@ import com.chethan.services.ContactService;
 import com.chethan.utils.JazzyViewPager;
 import com.chethan.utils.JazzyViewPager.TransitionEffect;
 import com.chethan.utils.PagerSlidingTabStrip;
-import com.chethan.utils.ThemeUtil;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -153,11 +152,11 @@ public class MainActivity extends FragmentActivity {
 		List<Fragment> fList = new ArrayList<Fragment>();
 		fList.add(PhoneFragment.newInstance(contactService));
 		fList.add(CalllogFragment.newInstance(contactService));
-		if (ThemeUtil.gridOrFancyScroller.equalsIgnoreCase("fancy")) {
-			fList.add(PeopleFragment.newInstance(contactService));
-		} else {
-			fList.add(AllContactsFragment.newInstance(contactService));
-		}
+		// if (ThemeUtil.gridOrFancyScroller.equalsIgnoreCase("fancy")) {
+		fList.add(PeopleFragment.newInstance(contactService));
+		// } else {
+		// fList.add(AllContactsFragment.newInstance(contactService));
+		// }
 		fList.add(MeFragment.newInstance(contactService));
 		return fList;
 	}

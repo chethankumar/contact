@@ -13,10 +13,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.chethan.contact.AccountUtils.UserProfile;
 import com.chethan.services.ContactService;
+import com.chethan.utils.AccountUtils;
+import com.chethan.utils.AccountUtils.UserProfile;
 import com.chethan.utils.RoundedImageView;
-import com.chethan.utils.ThemeUtil;
 import com.chethan.utils.Utils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -68,9 +68,6 @@ public class MeFragment extends Fragment {
 		name.setTypeface(Utils.getLightTypeface(getActivity()));
 		tagline.setTypeface(Utils.getLightTypeface(getActivity()));
 
-		profile_background.setImageResource(ThemeUtil.meProfilePicture);
-		profile_foreground.setImageResource(ThemeUtil.meProfilePictureForeground);
-
 		editProfile = (ImageView) view.findViewById(R.id.me_profile_edit);
 
 		populateExistingMeDetails();
@@ -109,7 +106,9 @@ public class MeFragment extends Fragment {
 				ImageLoader.getInstance().displayImage(phoUri, profilePicture);
 			}
 
-			// if (c.getString(c.getColumnIndex(ContactsContract.CommonDataKinds.Note.NOTE)) != null) {
+			// if
+			// (c.getString(c.getColumnIndex(ContactsContract.CommonDataKinds.Note.NOTE))
+			// != null) {
 			// tagline.setText((c.getString(c.getColumnIndex(ContactsContract.CommonDataKinds.Note.NOTE))));
 			// }
 
