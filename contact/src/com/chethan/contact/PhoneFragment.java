@@ -84,7 +84,7 @@ public class PhoneFragment extends Fragment {
 				ViewHolder viewHolder;
 				int width = Utils.getWidthForCard(getActivity()) - Utils.getPx(getActivity(), 10);
 				if (view == null) {
-					view = (LinearLayout) inflater.inflate(R.layout.me_contact, parent, false);
+					view = (LinearLayout) inflater.inflate(R.layout.all_contacts_tile, parent, false);
 					viewHolder = new ViewHolder();
 					view.setLayoutParams(new AbsListView.LayoutParams(width, Utils.getHeightForCard(getActivity())));
 					viewHolder.photoImageView = (RoundedImageView) view.findViewById(R.id.allContactPhoto);

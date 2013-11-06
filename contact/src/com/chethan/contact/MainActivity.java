@@ -153,9 +153,9 @@ public class MainActivity extends FragmentActivity {
 		fList.add(PhoneFragment.newInstance(contactService));
 		fList.add(CalllogFragment.newInstance(contactService));
 		// if (ThemeUtil.gridOrFancyScroller.equalsIgnoreCase("fancy")) {
-		fList.add(PeopleFragment.newInstance(contactService));
+		// fList.add(PeopleFragment.newInstance(contactService));
 		// } else {
-		// fList.add(AllContactsFragment.newInstance(contactService));
+		fList.add(AllContactsFragment.newInstance(contactService));
 		// }
 		fList.add(MeFragment.newInstance(contactService));
 		return fList;

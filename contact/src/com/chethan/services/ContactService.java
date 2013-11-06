@@ -24,7 +24,6 @@ import com.chethan.objects.SimpleContact;
 public class ContactService extends Service {
 
 	public final IBinder mBinder = new LocalBinder();
-	// public final Messenger mMessenger = new Messenger(new IncomingHandler());
 
 	private static Cursor c;
 	private static boolean isDataLoaded = false;
@@ -261,7 +260,8 @@ public class ContactService extends Service {
 
 	public Person readContact(String contactId) {
 		ContentResolver cr = getContentResolver();
-		// Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+		// Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null,
+		// ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
 		// new String[] { contactId }, null);
 
 		Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone._ID + " = ?",
