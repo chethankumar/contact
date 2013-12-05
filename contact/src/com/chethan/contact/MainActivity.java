@@ -3,13 +3,9 @@ package com.chethan.contact;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -18,6 +14,7 @@ import android.view.Menu;
 import android.view.ViewGroup;
 
 import com.chethan.services.ContactService;
+import com.chethan.services.ContactsService;
 import com.chethan.utils.JazzyViewPager;
 import com.chethan.utils.JazzyViewPager.TransitionEffect;
 import com.chethan.utils.PagerSlidingTabStrip;
@@ -34,31 +31,6 @@ public class MainActivity extends FragmentActivity {
 	public static ContactService contactService = null;
 	public boolean mIsBound = false;
 
-	private ServiceConnection serviceConnection = new ServiceConnection() {
-		@Override
-		public void onServiceConnected(ComponentName className, IBinder service) {
-			// This is called when the connection with the service has been
-			// established, giving us the service object we can use to
-			// interact with the service. Because we have bound to a explicit
-			// service that we know is running in our own process, we can
-			// cast its IBinder to a concrete class and directly access it.
-			contactService = ((ContactService.LocalBinder) service).getService();
-			mIsBound = true;
-			customInitSequence();
-		}
-
-		@Override
-		public void onServiceDisconnected(ComponentName className) {
-			// This is called when the connection with the service has been
-			// unexpectedly disconnected -- that is, its process crashed.
-			// Because it is running in our same process, we should never
-			// see this happen.
-			contactService = null;
-			mIsBound = false;
-		}
-
-	};
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -73,9 +45,7 @@ public class MainActivity extends FragmentActivity {
 				.defaultDisplayImageOptions(defaultOptions).build();
 		ImageLoader.getInstance().init(config);
 
-		Intent service = new Intent(getApplicationContext(), ContactService.class);
-		getApplicationContext().startService(service);
-		getApplicationContext().bindService(service, serviceConnection, Context.BIND_AUTO_CREATE);
+		customInitSequence();
 
 		mIsBound = true;
 
@@ -119,6 +89,9 @@ public class MainActivity extends FragmentActivity {
 		// }
 		// }
 		// });
+
+		Intent newServiceIntent = new Intent(getApplicationContext(), ContactsService.class);
+		getApplicationContext().startService(newServiceIntent);
 	}
 
 	private void customInitSequence() {
@@ -150,14 +123,14 @@ public class MainActivity extends FragmentActivity {
 
 	private List<Fragment> getFragments() {
 		List<Fragment> fList = new ArrayList<Fragment>();
-		fList.add(PhoneFragment.newInstance(contactService));
-		fList.add(CalllogFragment.newInstance(contactService));
+		fList.add(PhoneFragment.newInstance());
+		fList.add(CalllogFragment.newInstance());
 		// if (ThemeUtil.gridOrFancyScroller.equalsIgnoreCase("fancy")) {
 		// fList.add(PeopleFragment.newInstance(contactService));
 		// } else {
-		fList.add(AllContactsFragment.newInstance(contactService));
+		fList.add(AllContactsFragment.newInstance());
 		// }
-		fList.add(MeFragment.newInstance(contactService));
+		fList.add(MeFragment.newInstance());
 		return fList;
 	}
 

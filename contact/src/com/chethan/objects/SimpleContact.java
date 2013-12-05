@@ -1,14 +1,25 @@
 package com.chethan.objects;
 
-import java.util.Comparator;
-
 import android.net.Uri;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class SimpleContact implements Comparable<SimpleContact> {
+public class SimpleContact implements Comparable<SimpleContact>, Parcelable {
 
 	private String id;
 	private String name;
 	private Uri photo;
+
+	public SimpleContact(Parcel source) {
+		id = source.readString();
+		name = source.readString();
+		String photoString = source.readString();
+		photo = photoString != null ? Uri.parse(photoString) : null;
+	}
+
+	public SimpleContact() {
+		super();
+	}
 
 	public String getId() {
 		return id;
@@ -36,11 +47,37 @@ public class SimpleContact implements Comparable<SimpleContact> {
 
 	@Override
 	public int compareTo(SimpleContact arg0) {
-		if(arg0.name!=null && this.name!=null){
+		if (arg0.name != null && this.name != null) {
 			String arg1 = arg0.getName();
-			return 	this.name.compareTo(arg1);
+			return this.name.compareTo(arg1);
 		}
 		return -1;
 	}
-	
+
+	@Override
+	public int describeContents() {
+		return this.hashCode();
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeString(id);
+		dest.writeString(name);
+		dest.writeString(photo != null ? photo.toString() : "null");
+	}
+
+	public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+
+		@Override
+		public SimpleContact createFromParcel(Parcel source) {
+			return new SimpleContact(source);
+		}
+
+		@Override
+		public SimpleContact[] newArray(int size) {
+			return new SimpleContact[size];
+		}
+
+	};
+
 }

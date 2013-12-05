@@ -2,8 +2,10 @@ package com.chethan.contact;
 
 import java.util.ArrayList;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,6 +14,7 @@ import android.support.v4.app.Fragment;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -25,7 +28,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.chethan.objects.SimpleContact;
-import com.chethan.services.ContactService;
 import com.chethan.utils.RoundedImageView;
 import com.chethan.utils.SearchUtil;
 import com.chethan.utils.Utils;
@@ -49,16 +51,15 @@ public class PhoneFragment extends Fragment {
 	private TextView call_txt;
 	private ImageView backspace;
 	private Vibrator myVib;
-	private static ContactService contactService;
 	private GridView searchGridView;
 	private ArrayList<SimpleContact> searchList = new ArrayList<SimpleContact>();
 	private ArrayList<SimpleContact> contactList = new ArrayList<SimpleContact>();
+	private ArrayList<SimpleContact> callHistories = new ArrayList<SimpleContact>();
 
 	private StringBuilder searchString;
 
-	public static final PhoneFragment newInstance(ContactService service) {
+	public static final PhoneFragment newInstance() {
 		PhoneFragment f = new PhoneFragment();
-		contactService = service;
 		return f;
 	}
 
@@ -69,10 +70,27 @@ public class PhoneFragment extends Fragment {
 		initPhoneNumbers(v);
 		searchGridView = (GridView) v.findViewById(R.id.SearchgridView);
 
-		contactList = contactService.getSimpleContactsList();
 		initAdapterOfSearchGridView(inflater);
 
+		getActivity().registerReceiver(receiver, new IntentFilter("com.contacts.sendContactDetails"));
 		return v;
+	}
+
+	private BroadcastReceiver receiver = new BroadcastReceiver() {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			contactList = intent.getExtras().getParcelableArrayList("simpleContactList");
+			callHistories = intent.getExtras().getParcelableArrayList("callHistorySimpleContactList");
+			Log.i("contact", "contact size :: " + contactList.size());
+		}
+
+	};
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		getActivity().registerReceiver(receiver, new IntentFilter("com.contacts.sendContactDetails"));
 	}
 
 	private void initAdapterOfSearchGridView(final LayoutInflater inflater) {
@@ -127,65 +145,45 @@ public class PhoneFragment extends Fragment {
 		});/*
 			 * () {
 			 * 
-			 * @Override public void unregisterDataSetObserver(DataSetObserver
-			 * arg0) { // TODO Auto-generated method stub
+			 * @Override public void unregisterDataSetObserver(DataSetObserver arg0) { // TODO Auto-generated method stub
 			 * 
 			 * }
 			 * 
-			 * @Override public void registerDataSetObserver(DataSetObserver
-			 * arg0) { // TODO Auto-generated method stub
+			 * @Override public void registerDataSetObserver(DataSetObserver arg0) { // TODO Auto-generated method stub
 			 * 
 			 * }
 			 * 
 			 * @Override public boolean isEmpty() { return false; }
 			 * 
-			 * @Override public boolean hasStableIds() { // TODO Auto-generated
-			 * method stub return false; }
+			 * @Override public boolean hasStableIds() { // TODO Auto-generated method stub return false; }
 			 * 
 			 * @Override public int getViewTypeCount() { return 1; }
 			 * 
-			 * @Override public View getView(int position, View view, ViewGroup
-			 * container) { ViewHolder viewHolder; int width =
-			 * Utils.getWidthForCard(getActivity()) - Utils.getPx(getActivity(),
-			 * 10); if (view == null) { view = (LinearLayout)
-			 * inflater.inflate(R.layout.me_contact, container, false);
-			 * viewHolder = new ViewHolder(); view.setLayoutParams(new
-			 * AbsListView.LayoutParams(width,
-			 * Utils.getHeightForCard(getActivity())));
-			 * viewHolder.photoImageView = (RoundedImageView)
-			 * view.findViewById(R.id.allContactPhoto);
-			 * viewHolder.photoImageView.getLayoutParams().height = width;//
-			 * -Utils.getPx(getActivity(), // 15);
-			 * viewHolder.photoImageView.getLayoutParams().width = width;//
-			 * -Utils.getPx(getActivity(), // 15);
-			 * viewHolder.contactNameTextView = (TextView)
-			 * view.findViewById(R.id.allContactName); view.setTag(viewHolder);
-			 * } else { viewHolder = (ViewHolder) view.getTag(); }
+			 * @Override public View getView(int position, View view, ViewGroup container) { ViewHolder viewHolder; int width =
+			 * Utils.getWidthForCard(getActivity()) - Utils.getPx(getActivity(), 10); if (view == null) { view = (LinearLayout)
+			 * inflater.inflate(R.layout.me_contact, container, false); viewHolder = new ViewHolder(); view.setLayoutParams(new
+			 * AbsListView.LayoutParams(width, Utils.getHeightForCard(getActivity()))); viewHolder.photoImageView = (RoundedImageView)
+			 * view.findViewById(R.id.allContactPhoto); viewHolder.photoImageView.getLayoutParams().height = width;//
+			 * -Utils.getPx(getActivity(), // 15); viewHolder.photoImageView.getLayoutParams().width = width;// -Utils.getPx(getActivity(),
+			 * // 15); viewHolder.contactNameTextView = (TextView) view.findViewById(R.id.allContactName); view.setTag(viewHolder); } else {
+			 * viewHolder = (ViewHolder) view.getTag(); }
 			 * 
-			 * viewHolder.contactNameTextView.setText(searchList.get(position).
-			 * getName()); // highlight matching text
-			 * highlightText(viewHolder.contactNameTextView); if
-			 * (searchList.get(position).getPhoto() != null) {
-			 * ImageLoader.getInstance
-			 * ().displayImage(searchList.get(position).getPhoto().toString(),
-			 * viewHolder.photoImageView); } else {
-			 * viewHolder.photoImageView.setImageResource(R.drawable.me6); }
-			 * return view; }
+			 * viewHolder.contactNameTextView.setText(searchList.get(position). getName()); // highlight matching text
+			 * highlightText(viewHolder.contactNameTextView); if (searchList.get(position).getPhoto() != null) { ImageLoader.getInstance
+			 * ().displayImage(searchList.get(position).getPhoto().toString(), viewHolder.photoImageView); } else {
+			 * viewHolder.photoImageView.setImageResource(R.drawable.me6); } return view; }
 			 * 
-			 * @Override public int getItemViewType(int arg0) { // TODO
-			 * Auto-generated method stub return 0; }
+			 * @Override public int getItemViewType(int arg0) { // TODO Auto-generated method stub return 0; }
 			 * 
 			 * @Override public long getItemId(int arg0) { return arg0; }
 			 * 
-			 * @Override public Object getItem(int arg0) { return
-			 * searchList.get(arg0); }
+			 * @Override public Object getItem(int arg0) { return searchList.get(arg0); }
 			 * 
 			 * @Override public int getCount() { return searchList.size(); }
 			 * 
 			 * @Override public boolean isEnabled(int arg0) { return true; }
 			 * 
-			 * @Override public boolean areAllItemsEnabled() { return true; }
-			 * });
+			 * @Override public boolean areAllItemsEnabled() { return true; } });
 			 */
 
 	}
@@ -216,7 +214,7 @@ public class PhoneFragment extends Fragment {
 		if (SearchUtil.search(contactList, phone_call.getText().toString()) != null) {
 			searchList.clear();
 			searchList = SearchUtil.search(contactList, phone_call.getText().toString());
-			searchList = SearchUtil.SortByPriority(searchList, contactService.getCallHistorySimpleContactList());
+			searchList = SearchUtil.SortByPriority(searchList, callHistories);
 			((BaseAdapter) searchGridView.getAdapter()).notifyDataSetChanged();
 		} else {
 			searchList.clear();

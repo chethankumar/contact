@@ -3,8 +3,11 @@ package com.chethan.contact;
 import java.util.ArrayList;
 import java.util.Date;
 
+import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
@@ -26,7 +29,6 @@ import android.widget.TextView;
 
 import com.chethan.objects.Person;
 import com.chethan.objects.SimpleContact;
-import com.chethan.services.ContactService;
 import com.chethan.utils.RoundedImageView;
 import com.chethan.utils.Utils;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -34,15 +36,13 @@ import com.twotoasters.jazzylistview.JazzyGridView;
 
 public class AllContactsFragment extends Fragment {
 
-	private static ContactService contactService;
 	private Vibrator myVib;
 	private ArrayList<SimpleContact> contactList = new ArrayList<SimpleContact>();
 	private JazzyGridView gridView;
 	private TextView alphabetTextView;
 
-	public static final AllContactsFragment newInstance(ContactService service) {
+	public static final AllContactsFragment newInstance() {
 		AllContactsFragment f = new AllContactsFragment();
-		contactService = service;
 		return f;
 	}
 
@@ -60,10 +60,27 @@ public class AllContactsFragment extends Fragment {
 				Utils.getWidthForAlphabets(getActivity()), android.widget.FrameLayout.LayoutParams.MATCH_PARENT);
 		alphabetTextView.setLayoutParams(alphabets_params);
 		alphabetTextView.setTypeface(Utils.getSegoeTypeface(getActivity()));
-		contactList = contactService.getSimpleContactsList();
 
 		populateContactsGridView(inflater);
+		getActivity().registerReceiver(receiver, new IntentFilter("com.contacts.sendContactDetails"));
 		return v;
+	}
+
+	private BroadcastReceiver receiver = new BroadcastReceiver() {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			contactList = intent.getExtras().getParcelableArrayList("simpleContactList");
+			((BaseAdapter) gridView.getAdapter()).notifyDataSetChanged();
+		}
+
+	};
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		getActivity().registerReceiver(receiver, new IntentFilter("com.contacts.sendContactDetails"));
+		((BaseAdapter) gridView.getAdapter()).notifyDataSetChanged();
 	}
 
 	private void populateContactsGridView(final LayoutInflater inflater) {

@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.chethan.services.ContactService;
 import com.chethan.utils.AccountUtils;
 import com.chethan.utils.AccountUtils.UserProfile;
 import com.chethan.utils.RoundedImageView;
@@ -21,8 +20,6 @@ import com.chethan.utils.Utils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class MeFragment extends Fragment {
-
-	public static ContactService contactService;
 
 	private TextView name;
 	private TextView tagline;
@@ -34,9 +31,8 @@ public class MeFragment extends Fragment {
 
 	String meid;
 
-	public static final MeFragment newInstance(ContactService service) {
+	public static final MeFragment newInstance() {
 		MeFragment f = new MeFragment();
-		contactService = service;
 		return f;
 	}
 
