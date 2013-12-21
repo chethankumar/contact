@@ -18,6 +18,7 @@ import com.chethan.services.ContactsService;
 import com.chethan.utils.JazzyViewPager;
 import com.chethan.utils.JazzyViewPager.TransitionEffect;
 import com.chethan.utils.PagerSlidingTabStrip;
+import com.chethan.utils.Preferences;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -35,6 +36,9 @@ public class MainActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		Preferences.initPreferences(this);
+		
 		Parse.initialize(this, "52RxIGTkCts1unU6ERHP4Z5u5WLcaMjGWufohyKR", "Lmmu0szFdeqXSWUqCDDwgUEbxcUVqQaZTZOImhcd");
 		DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder().cacheInMemory(true).cacheOnDisc(true)
 				.imageScaleType(ImageScaleType.IN_SAMPLE_INT).bitmapConfig(android.graphics.Bitmap.Config.RGB_565)
@@ -90,6 +94,7 @@ public class MainActivity extends FragmentActivity {
 		// }
 		// });
 
+		Preferences.setTheme(Preferences.WHITE);
 		Intent newServiceIntent = new Intent(getApplicationContext(), ContactsService.class);
 		getApplicationContext().startService(newServiceIntent);
 	}
@@ -108,14 +113,6 @@ public class MainActivity extends FragmentActivity {
 	}
 
 	private void initTabs() {
-		// TextView textView = (TextView)findViewById(R.id.phone);
-		// textView.setTypeface(Utils.getSegoeTypeface(this));
-		// textView = (TextView)findViewById(R.id.log);
-		// textView.setTypeface(Utils.getSegoeTypeface(this));
-		// textView = (TextView)findViewById(R.id.contacts);
-		// textView.setTypeface(Utils.getSegoeTypeface(this));
-		// textView = (TextView)findViewById(R.id.me);
-		// textView.setTypeface(Utils.getSegoeTypeface(this));
 		PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.main_tabs);
 		tabs.setIndicatorColor(Color.parseColor("#00B4FF"));
 		tabs.setViewPager(pager);

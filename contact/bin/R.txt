@@ -65,9 +65,10 @@ int drawable style_tile_red 0x7f020026
 int drawable teal 0x7f020027
 int drawable text 0x7f020028
 int drawable tuv 0x7f020029
-int drawable whitetile 0x7f02002a
-int drawable winkle 0x7f02002b
-int drawable wxyz 0x7f02002c
+int drawable white 0x7f02002a
+int drawable whitetile 0x7f02002b
+int drawable winkle 0x7f02002c
+int drawable wxyz 0x7f02002d
 int id ContactScroller_name 0x7f040045
 int id ContactScroller_name1 0x7f040047
 int id ContactScroller_name2 0x7f040048

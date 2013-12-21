@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.chethan.objects.SimpleContact;
 import com.chethan.services.ContactService;
+import com.chethan.utils.Preferences;
 import com.chethan.utils.RoundedImageView;
 import com.chethan.utils.Utils;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -56,7 +57,7 @@ public class PeopleFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		final View view = inflater.inflate(R.layout.people_all, container, false);
-		
+		view.setBackgroundResource(Preferences.getScreenBackground());
 		//init all views
 		ContactScroller = (View)view.findViewById(R.id.single_contact);
 		android.widget.LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(Utils.getWidthForContact(getActivity()), android.widget.FrameLayout.LayoutParams.WRAP_CONTENT);

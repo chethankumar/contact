@@ -27,6 +27,7 @@ import android.widget.TextView;
 
 import com.chethan.objects.CallHistory;
 import com.chethan.services.ContactsService;
+import com.chethan.utils.Preferences;
 import com.chethan.utils.Utils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.PauseOnScrollListener;
@@ -48,6 +49,7 @@ public class CalllogFragment extends Fragment {
 	public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.call_log, container, false);
 
+		v.setBackgroundResource(Preferences.getScreenBackground());
 		gridView = (GridView) v.findViewById(R.id.gridView);
 		myVib = (Vibrator) getActivity().getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
 

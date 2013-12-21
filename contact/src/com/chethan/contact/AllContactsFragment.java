@@ -29,6 +29,7 @@ import android.widget.TextView;
 
 import com.chethan.objects.Person;
 import com.chethan.objects.SimpleContact;
+import com.chethan.utils.Preferences;
 import com.chethan.utils.RoundedImageView;
 import com.chethan.utils.Utils;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -49,6 +50,7 @@ public class AllContactsFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.all_contacts, container, false);
+		v.setBackgroundResource(Preferences.getScreenBackground());
 		myVib = (Vibrator) getActivity().getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
 		gridView = (JazzyGridView) v.findViewById(R.id.allContactsGridView);
 		android.widget.LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(Utils.getWidthForContact(getActivity()),

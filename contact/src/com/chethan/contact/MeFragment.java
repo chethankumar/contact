@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.chethan.utils.AccountUtils;
 import com.chethan.utils.AccountUtils.UserProfile;
+import com.chethan.utils.Preferences;
 import com.chethan.utils.RoundedImageView;
 import com.chethan.utils.Utils;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -39,7 +40,7 @@ public class MeFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.me, container, false);
-
+		view.setBackgroundResource(Preferences.getScreenBackground());
 		name = (TextView) view.findViewById(R.id.me_profile_name);
 		tagline = (TextView) view.findViewById(R.id.me_profile_tagline);
 

@@ -33,6 +33,7 @@ import android.widget.TextView;
 
 import com.chethan.contact.CalllogFragment.ViewHolder;
 import com.chethan.objects.SimpleContact;
+import com.chethan.utils.Preferences;
 import com.chethan.utils.RoundedImageView;
 import com.chethan.utils.SearchUtil;
 import com.chethan.utils.Utils;
@@ -77,7 +78,8 @@ public class PhoneFragment extends Fragment {
 		searchGridView = (GridView) v.findViewById(R.id.SearchgridView);
 
 		initAdapterOfSearchGridView(inflater);
-
+		
+		v.setBackgroundResource(Preferences.getScreenBackground());
 		getActivity().registerReceiver(receiver, new IntentFilter("com.contacts.sendContactDetails"));
 		return v;
 	}
@@ -218,7 +220,8 @@ public class PhoneFragment extends Fragment {
 				} else {
 					viewHolder = (DialViewHolder) convertView.getTag();
 				}
-				
+				viewHolder.charTextView.setTextColor(Color.parseColor(Preferences.getDialerCharacterFontColor()));
+				viewHolder.numberTextView.setTextColor(Color.parseColor(Preferences.getDialerFontColor()));
 				viewHolder.charTextView.setText(characterStrings[position]);
 				viewHolder.numberTextView.setText(numberStrings[position]);
 				return convertView;
