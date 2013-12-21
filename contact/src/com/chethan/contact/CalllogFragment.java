@@ -100,7 +100,7 @@ public class CalllogFragment extends Fragment {
 					viewHolder.logDate.setTypeface(Utils.getSegoeTypeface(getActivity()));
 					viewHolder.logTime = (TextView) mygridView.findViewById(R.id.log_time);
 					viewHolder.logTime.setTypeface(Utils.getSegoeTypeface(getActivity()));
-					viewHolder.photoImageView.setImageResource(R.drawable.contact);
+					viewHolder.photoImageView.setImageResource(R.drawable.me6);
 					viewHolder.cardForLogTile = (LinearLayout) mygridView.findViewById(R.id.log_tile_card_background);
 					mygridView.setTag(viewHolder);
 				} else {
@@ -111,7 +111,8 @@ public class CalllogFragment extends Fragment {
 						.getPhoneNumber() : callHistories.get(position).getName());
 				viewHolder.logDate.setText(Utils.getDate(callHistories.get(position).getDate()));
 				viewHolder.logTime.setText(Utils.getTime(callHistories.get(position).getDate()));
-
+				viewHolder.photoImageView.setImageResource(R.drawable.me6);
+				
 				if (callHistories.get(position).getPhoto() != null) {
 					// Picasso.with(getActivity()).load(callHistories.get(position).getPhoto()).into(viewHolder.photoImageView);
 					ImageLoader.getInstance().displayImage(callHistories.get(position).getPhoto().toString(), viewHolder.photoImageView);

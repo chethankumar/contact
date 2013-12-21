@@ -61,8 +61,19 @@
         
     </LinearLayout>
     
+    <GridView 
+        android:id="@+id/dialer_gridView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stretchMode="columnWidth"
+        android:gravity="center_horizontal"
+        android:horizontalSpacing="4dp"
+       	android:verticalSpacing="8dp"
+       	android:layout_weight="1"
+        android:numColumns="3"/>
+    
     <!-- dialpad (should change to grid view. this is ugly)-->
-    <LinearLayout android:orientation="horizontal"
+    <!-- <LinearLayout android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:id="@+id/row1">
@@ -217,6 +228,6 @@
         android:textColor="#515151"
         android:background="@drawable/blank"
         android:text="#" />
-    </LinearLayout>
+    </LinearLayout> -->
     
 </LinearLayout>
